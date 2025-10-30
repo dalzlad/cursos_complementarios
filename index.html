@@ -13,6 +13,9 @@
     .module-card {
       transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .module-card:hover {
       transform: translateY(-8px);
@@ -28,6 +31,7 @@
       color:white;
       font-weight:700;
       font-size: 1.5rem;
+      flex-shrink: 0;
     }
     .status-badge {
       position: absolute;
@@ -40,6 +44,12 @@
     }
     .status-completed { background-color: #16a34a; color: white; }
     .status-progress { background-color: #f59e0b; color: white; }
+    .module-text {
+      min-height: 3rem; /* misma altura para todos los títulos */
+    }
+    .buttons-container {
+      margin-top: 0.5rem; /* separa botones del texto */
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-start px-6 py-12">
@@ -56,72 +66,69 @@
   </main>
 
   <!-- 📚 Recursos complementarios -->
-<section class="card p-6 mb-6">
-  <h3 class="text-2xl font-semibold text-slate-900 mb-4">📚 Recursos complementarios</h3>
-  <p class="text-gray-700 mb-4">
-    Explora estas ayudas externas para reforzar tu aprendizaje de manera práctica y visual. No son clases adicionales, sino
-    recursos de apoyo que complementan el aprendizaje.
-  </p>
-
-  <!-- 1. Recursos oficiales -->
-  <div class="mb-6">
-    <h4 class="text-xl font-semibold mb-2 text-slate-800">1️⃣ Recursos oficiales de MongoDB</h4>
-    <ul class="list-disc pl-6 text-gray-700 space-y-1">
-      <li><a href="https://www.mongodb.com/docs/" target="_blank" class="text-teal-700 hover:underline">📘 Documentación oficial de MongoDB</a></li>
-      <li><a href="https://www.mongodb.com/docs/atlas/" target="_blank" class="text-teal-700 hover:underline">☁️ Guía de MongoDB Atlas</a></li>
-      <li><a href="https://learn.mongodb.com/" target="_blank" class="text-teal-700 hover:underline">🎓 MongoDB University (cursos gratuitos)</a></li>
-    </ul>
-  </div>
-
-  <!-- 2. Videos explicativos -->
-  <div class="mb-6">
-    <h4 class="text-xl font-semibold mb-2 text-slate-800">2️⃣ Videos cortos explicativos</h4>
-    <p class="text-gray-700 mb-2">Aprende visualmente con estos videos introductorios:</p>
-    <ul class="list-disc pl-6 text-gray-700 space-y-1">
-      <li><a href="https://www.youtube.com/watch?v=EE8ZTQxa0AM" target="_blank" class="text-teal-700 hover:underline">🎥 ¿Qué es MongoDB?</a></li>
-      <li><a href="https://www.youtube.com/watch?v=pWbMrx5rVBE" target="_blank" class="text-teal-700 hover:underline">🧩 CRUD básico con MongoDB</a></li>
-      <li><a href="https://www.youtube.com/shorts/8HzHbqr2Meo" target="_blank" class="text-teal-700 hover:underline">🔍 Diferencias entre NoSQL y SQL</a></li>
-    </ul>
-  </div>
-
-  <!-- 3. Simulador de comandos -->
-  <div class="mb-6">
-    <h4 class="text-xl font-semibold mb-2 text-slate-800">3️⃣ Simulador de comandos (Playground)</h4>
-    <p class="text-gray-700 mb-2">
-      Practica tus consultas sin necesidad de instalar MongoDB localmente:
+  <section class="card p-6 mb-6">
+    <h3 class="text-2xl font-semibold text-slate-900 mb-4">📚 Recursos complementarios</h3>
+    <p class="text-gray-700 mb-4">
+      Explora estas ayudas externas para reforzar tu aprendizaje de manera práctica y visual. No son clases adicionales, sino
+      recursos de apoyo que complementan el aprendizaje.
     </p>
-    <ul class="list-disc pl-6 text-gray-700 space-y-1">
-      <li><a href="https://mongoplayground.net/" target="_blank" class="text-teal-700 hover:underline">🧪 MongoDB Playground</a> — prueba consultas y pipelines directamente en tu navegador.</li>
-      <li><a href="https://www.mongodb.com/try/download/shell" target="_blank" class="text-teal-700 hover:underline">💻 Descargar MongoDB Shell</a> — para practicar desde tu computador.</li>
-    </ul>
-  </div>
 
-  <!-- 4. Guías rápidas / Chuletas -->
-  <div>
-    <h4 class="text-xl font-semibold mb-2 text-slate-800">4️⃣ Guías rápidas</h4>
-    <p class="text-gray-700 mb-2">Consulta estos resúmenes para repasar los comandos y sintaxis esenciales:</p>
-    <ul class="list-disc pl-6 text-gray-700 space-y-1">
-      <li><a href="https://www.mongodb.com/developer/quickstart/cheat-sheet/" target="_blank" class="text-teal-700 hover:underline">📄 MongoDB Cheat Sheet (oficial)</a></li>
-    </ul>
-  </div>
-</section>
+    <!-- 1. Recursos oficiales -->
+    <div class="mb-6">
+      <h4 class="text-xl font-semibold mb-2 text-slate-800">1️⃣ Recursos oficiales de MongoDB</h4>
+      <ul class="list-disc pl-6 text-gray-700 space-y-1">
+        <li><a href="https://www.mongodb.com/docs/" target="_blank" class="text-teal-700 hover:underline">📘 Documentación oficial de MongoDB</a></li>
+        <li><a href="https://www.mongodb.com/docs/atlas/" target="_blank" class="text-teal-700 hover:underline">☁️ Guía de MongoDB Atlas</a></li>
+        <li><a href="https://learn.mongodb.com/" target="_blank" class="text-teal-700 hover:underline">🎓 MongoDB University (cursos gratuitos)</a></li>
+      </ul>
+    </div>
 
+    <!-- 2. Videos explicativos -->
+    <div class="mb-6">
+      <h4 class="text-xl font-semibold mb-2 text-slate-800">2️⃣ Videos cortos explicativos</h4>
+      <p class="text-gray-700 mb-2">Aprende visualmente con estos videos introductorios:</p>
+      <ul class="list-disc pl-6 text-gray-700 space-y-1">
+        <li><a href="https://www.youtube.com/watch?v=EE8ZTQxa0AM" target="_blank" class="text-teal-700 hover:underline">🎥 ¿Qué es MongoDB?</a></li>
+        <li><a href="https://www.youtube.com/watch?v=pWbMrx5rVBE" target="_blank" class="text-teal-700 hover:underline">🧩 CRUD básico con MongoDB</a></li>
+        <li><a href="https://www.youtube.com/shorts/8HzHbqr2Meo" target="_blank" class="text-teal-700 hover:underline">🔍 Diferencias entre NoSQL y SQL</a></li>
+      </ul>
+    </div>
 
- <footer class="mt-10 text-center text-sm text-gray-500">
+    <!-- 3. Simulador de comandos -->
+    <div class="mb-6">
+      <h4 class="text-xl font-semibold mb-2 text-slate-800">3️⃣ Simulador de comandos (Playground)</h4>
+      <p class="text-gray-700 mb-2">
+        Practica tus consultas sin necesidad de instalar MongoDB localmente:
+      </p>
+      <ul class="list-disc pl-6 text-gray-700 space-y-1">
+        <li><a href="https://mongoplayground.net/" target="_blank" class="text-teal-700 hover:underline">🧪 MongoDB Playground</a> — prueba consultas y pipelines directamente en tu navegador.</li>
+        <li><a href="https://www.mongodb.com/try/download/shell" target="_blank" class="text-teal-700 hover:underline">💻 Descargar MongoDB Shell</a> — para practicar desde tu computador.</li>
+      </ul>
+    </div>
+
+    <!-- 4. Guías rápidas / Chuletas -->
+    <div>
+      <h4 class="text-xl font-semibold mb-2 text-slate-800">4️⃣ Guías rápidas</h4>
+      <p class="text-gray-700 mb-2">Consulta estos resúmenes para repasar los comandos y sintaxis esenciales:</p>
+      <ul class="list-disc pl-6 text-gray-700 space-y-1">
+        <li><a href="https://www.mongodb.com/developer/quickstart/cheat-sheet/" target="_blank" class="text-teal-700 hover:underline">📄 MongoDB Cheat Sheet (oficial)</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="mt-10 text-center text-sm text-gray-500">
     <p>📘 Guía de apoyo educativo — Versión 2025
       Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
   </footer>
 
   <script>
     const modules = [
-      { id: 1, color: 'green', emoji: '🌱', title: 'Introducción a MongoDB y JSON', time: '3 h', level: 'Principiante' },
-      { id: 2, color: 'sky', emoji: '🔁', title: 'De lo relacional a lo documental', time: '3 h', level: 'Principiante' },
-      { id: 3, color: 'indigo', emoji: '🔎', title: 'Tipos de datos básicos en MongoDB', time: '3 h', level: 'Principiante' },
-      { id: 4, color: 'emerald', emoji: '🛠️', title: 'CRUD básico en MongoDB', time: '3 h', level: 'Principiante' },
-      { id: 5, color: 'rose', emoji: '🧩', title: 'Consultas avanzadas y operadores', time: '3 h', level: 'Principiante' },
-      { id: 6, color: 'yellow', emoji: '📊', title: 'Agregaciones y pipelines', time: '3 h', level: 'Principiante' },
-      { id: 7, color: 'cyan', emoji: '🧭', title: 'MongoDB Compass — Exploración visual', time: '3 h', level: 'Principiante' },
-      //{ id: 8, color: 'cyan', emoji: '⚙️', title: 'Seguridad, índices y rendimiento', time: '3 h', level: 'Principiante' },
+      { id: 0, color: 'violet', emoji: '🏠', title: 'Inicio del curso y presentación', summary: 'Conoce el curso, objetivos y recursos disponibles.', time: '2 h', level: 'Informativo' },
+      { id: 1, color: 'green', emoji: '🌱', title: 'Introducción a MongoDB y JSON', summary: 'Fundamentos de MongoDB y estructura de datos JSON.', time: '2 h', level: 'Principiante' },
+      { id: 2, color: 'sky', emoji: '🔁', title: 'De lo relacional a lo documental', summary: 'Conceptos de bases de datos relacionales vs NoSQL.', time: '2 h', level: 'Principiante' },
+      { id: 3, color: 'indigo', emoji: '🔎', title: 'Tipos de datos básicos en MongoDB', summary: 'Aprende los tipos de datos más usados en documentos MongoDB.', time: '2 h', level: 'Principiante' },
+      { id: 4, color: 'emerald', emoji: '🛠️', title: 'CRUD básico en MongoDB', summary: 'Crear, leer, actualizar y eliminar documentos.', time: '2 h', level: 'Principiante' },
+      { id: 5, color: 'rose', emoji: '🧩', title: 'Consultas avanzadas y operadores', summary: 'Filtrado, operadores y consultas más complejas.', time: '2 h', level: 'Principiante' }
     ];
 
     const container = document.getElementById('modules-container');
@@ -140,61 +147,27 @@
     function renderModules() {
       container.innerHTML = "";
       modules.forEach(mod => {
-        const status = localStorage.getItem(`modulo${mod.id}_estado`) || 'progress';
-        const badgeClass = status === 'completed' ? 'status-completed' : 'status-progress';
-        const badgeText = status === 'completed' ? '✅ Completado' : '🔄 En progreso';
-        const toggleText = status === 'completed' ? 'Desmarcar' : 'Marcar ✅';
-
         const html = `
-          <div class="module-card bg-white p-6 rounded-2xl shadow hover:shadow-lg flex flex-col justify-between" data-id="${mod.id}">
-            <span class="status-badge ${badgeClass}">${badgeText}</span>
+          <div class="module-card bg-white p-6 rounded-2xl shadow hover:shadow-lg" data-id="${mod.id}">
             <div class="flex items-start gap-4">
               <div class="icon" style="background-color: ${colorMap[mod.color]}">${mod.emoji}</div>
-              <div>
+              <div class="flex flex-col">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-1">Módulo ${mod.id}</h2>
-                <p class="text-gray-700 text-lg">${mod.title}</p>
+                <p class="text-gray-700 text-lg module-text">${mod.title}</p>
+                <p class="text-gray-600 mt-1">${mod.summary}</p>
               </div>
             </div>
-            <div class="mt-4 flex items-center justify-between">
+            <div class="mt-4 flex items-center justify-between buttons-container">
               <span class="text-sm text-gray-600">Duración: ${mod.time} • Nivel: ${mod.level}</span>
-              <div class="flex gap-2">
-                <button class="px-3 py-2 rounded-lg text-sm text-white" style="background-color: ${colorMap[mod.color]}" data-action="open">Abrir</button>
-                <button class="px-3 py-2 rounded-lg text-sm text-white" style="background-color: ${colorMap[mod.color]}" data-action="toggle">${toggleText}</button>
-              </div>
+              <a href="modulos/modulo${mod.id}.html" class="px-3 py-2 rounded-lg text-sm text-white" style="background-color: ${colorMap[mod.color]}">Ver módulo</a>
             </div>
           </div>
         `;
         container.insertAdjacentHTML('beforeend', html);
       });
-
-      // Eventos
-      container.querySelectorAll('button[data-action="open"]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const card = e.target.closest('.module-card');
-          const id = card.dataset.id;
-          localStorage.setItem(`modulo${id}_estado`, 'completed');
-          renderModules();
-          window.location.href = `modulos/modulo${id}.html`;
-        });
-      });
-
-      container.querySelectorAll('button[data-action="toggle"]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const card = e.target.closest('.module-card');
-          const id = card.dataset.id;
-          const current = localStorage.getItem(`modulo${id}_estado`);
-          localStorage.setItem(`modulo${id}_estado`, current === 'completed' ? 'progress' : 'completed');
-          renderModules();
-        });
-      });
     }
 
     renderModules();
-
-    // Detectar cambios desde otras pestañas y actualizar automáticamente
-    window.addEventListener('storage', () => {
-      renderModules();
-    });
   </script>
 </body>
 </html>
