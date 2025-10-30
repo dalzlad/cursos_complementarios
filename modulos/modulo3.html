@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧭 Módulo 3 — Tipos de Datos en MongoDB y JSON/BSON</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --brand-1: #0ea5a4;
+      --brand-2: #0369a1;
+      --muted: #374151;
+      --bg-warm: #f5f9fb;
+      --code-bg: #0b1220;
+    }
+    html { font-size: 18px; scroll-behavior: smooth; }
+    body {
+      background: linear-gradient(135deg,#f0f6fb 0%,#eef7ff 100%);
+      color: #0f172a;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      line-height: 1.6;
+    }
+    .card { background: white; border-radius:14px; box-shadow: 0 10px 30px rgba(2,6,23,0.06); padding:1.5rem; margin-bottom:1.5rem; }
+    pre.code { background: var(--code-bg); color:#e6f3f1; padding:1rem; border-radius:10px; overflow:auto; font-family:ui-monospace, monospace; font-size:1rem; line-height:1.6; }
+    code.inline { background: rgba(3,105,161,0.06); padding:0.12rem 0.45rem; border-radius:6px; font-family:ui-monospace, monospace; }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .9rem; border-radius:10px; font-weight:600; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{ background: linear-gradient(90deg,var(--brand-1),var(--brand-2)); color:white; box-shadow:0 8px 20px rgba(3,105,161,0.12); }
+    .btn-ghost{ background:white; border:1px solid rgba(3,105,161,0.08); color:var(--brand-2); }
+
+    details summary { list-style: none; cursor:pointer; padding:.75rem 1rem; border-radius:10px; background: linear-gradient(180deg, rgba(6,95,70,0.04), transparent); font-weight:600; }
+    details[open] summary{ background: linear-gradient(180deg, rgba(3,105,161,0.06), transparent); }
+    details > .content { padding:0.75rem 1rem 1rem 1rem; }
+    .small { font-size:.95rem; color:var(--muted); }
+
+    @media (max-width:768px){ html { font-size:17px; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:linear-gradient(180deg,var(--brand-1),var(--brand-2));">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 6 7 11C7 15 11 20 12 22C13 20 17 15 17 11C17 6 12 2 12 2Z" fill="white"/></svg>
+        </div>
+        <span class="font-semibold text-lg text-slate-800">Curso MongoDB</span>
+      </a>
+      <div class="flex items-center gap-3 text-sm font-medium">
+        <a href="../modulos/modulo1.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 1</a>
+        <a href="../modulos/modulo2.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 2</a>
+        <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 3</a>
+        <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
+        <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
+        <a href="../modulos/modulo6.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 6</a>
+        <a href="../modulos/modulo7.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 7</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- Hero -->
+    <section class="mb-8 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🧭 Módulo 3 — Tipos de Datos en MongoDB y JSON/BSON</h1>
+      <p class="text-lg text-gray-600 mt-2">Duración: <strong>3 horas</strong> • Nivel: <strong>Básico</strong></p>
+
+      <div class="mt-4 flex items-center justify-center gap-3">
+        <button id="openIndex" class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
+      </div>
+    </section>
+
+    <!-- Objetivos -->
+    <section class="card">
+      <h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
+      <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
+        <li>Identificar los principales tipos de datos de MongoDB y su representación BSON.</li>
+        <li>Diferenciar cómo se almacenan internamente los documentos.</li>
+        <li>Usar los tipos adecuados para modelar datos correctamente.</li>
+        <li>Convertir tipos de datos desde JSON y comprender cómo MongoDB los interpreta.</li>
+        <li>Aplicar los tipos de datos en ejemplos reales (fechas, números, arrays, objetos, booleanos, nulos, etc.).</li>
+      </ul>
+    </section>
+
+    <!-- JSON vs BSON -->
+    <section class="card">
+      <h3 class="text-2xl font-semibold text-slate-900 mb-4">🧩 Introducción: JSON vs BSON</h3>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full border border-gray-200 rounded-xl text-left text-gray-700">
+          <thead class="bg-blue-100">
+            <tr><th class="p-3">Concepto</th><th class="p-3">JSON</th><th class="p-3">BSON</th></tr>
+          </thead>
+          <tbody>
+            <tr class="border-t"><td class="p-3 font-medium">Significado</td><td class="p-3">JavaScript Object Notation</td><td class="p-3">Binary JSON</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Formato</td><td class="p-3">Texto legible</td><td class="p-3">Binario</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Usado para</td><td class="p-3">Intercambio de datos</td><td class="p-3">Almacenamiento interno en MongoDB</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Ventajas</td><td class="p-3">Simple, interoperable</td><td class="p-3">Rápido, soporta más tipos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tipos de datos -->
+    <section class="card">
+      <h3 class="text-2xl font-semibold text-slate-900 mb-4">📌 Tipos de datos en MongoDB/BSON</h3>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full border border-gray-200 rounded-xl text-left text-gray-700">
+          <thead class="bg-green-100">
+            <tr><th class="p-3">Tipo</th><th class="p-3">Descripción</th><th class="p-3">Ejemplo</th></tr>
+          </thead>
+          <tbody>
+            <tr class="border-t"><td class="p-3 font-medium">String</td><td class="p-3">Cadena de texto UTF-8</td><td class="p-3">"Hola Mundo"</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Number</td><td class="p-3">Números enteros o decimales</td><td>42, 3.14</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Boolean</td><td class="p-3">Verdadero o falso</td><td>true, false</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Date</td><td class="p-3">Fechas y horas</td><td>ISODate("2025-10-28T00:00:00Z")</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Array</td><td class="p-3">Lista de valores</td><td>[1,2,3], ["a","b","c"]</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Object</td><td class="p-3">Documento embebido</td><td>{"nombre":"Diego","edad":30}</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">Null</td><td class="p-3">Valor nulo</td><td>null</td></tr>
+            <tr class="border-t"><td class="p-3 font-medium">ObjectId</td><td class="p-3">Identificador único de documento</td><td>ObjectId("652e...")</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Ejercicio -->
+    <section class="card">
+      <h3 class="text-2xl font-semibold text-slate-900 mb-3">💻 Ejercicio práctico</h3>
+      <p>Crear un documento MongoDB para almacenar información de un estudiante con los siguientes campos:</p>
+      <ul class="list-disc pl-6 mb-3">
+        <li>Nombre (String)</li>
+        <li>Edad (Number)</li>
+        <li>¿Activo? (Boolean)</li>
+        <li>Fecha de inscripción (Date)</li>
+        <li>Materias (Array de Strings)</li>
+        <li>Dirección (Object con calle y ciudad)</li>
+      </ul>
+      <details>
+        <summary>Ver solución</summary>
+        <div class="content">
+<pre class="code">
+{
+  "nombre": "Ana Pérez",
+  "edad": 21,
+  "activo": true,
+  "fecha_inscripcion": ISODate("2025-10-28T00:00:00Z"),
+  "materias": ["Matemáticas", "Historia", "Inglés"],
+  "direccion": {
+    "calle": "Calle 123",
+    "ciudad": "Medellín"
+  }
+}
+</pre>
+        </div>
+      </details>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3 class="text-2xl font-semibold text-slate-900 mb-4">📝 Quiz — Tipos de Datos (10 preguntas)</h3>
+      <div id="quiz"></div>
+    </section>
+
+    <!-- FOOTER -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+  <div class="flex gap-3">
+    <button class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
+  </div>
+</div>
+<footer class="mt-10 text-center text-sm text-gray-500">🌱 Curso Sincrónico — Introducción a MongoDB Atlas</footer>
+
+
+  </main>
+
+  <script>
+    const quizData = [
+      {
+        question: "1. ¿Qué tipo de dato usarías para almacenar un texto en MongoDB?",
+        options: ["String", "Number", "Boolean", "ObjectId"],
+        answer: "String"
+      },
+      {
+        question: "2. ¿Cuál es la función de ObjectId?",
+        options: ["Almacenar números", "Identificador único de documento", "Cadena de texto", "Fecha"],
+        answer: "Identificador único de documento"
+      },
+      {
+        question: "3. ¿Cómo se representa un valor nulo?",
+        options: ["0", "null", "''", "undefined"],
+        answer: "null"
+      },
+      {
+        question: "4. ¿Qué tipo de dato es adecuado para almacenar una lista de materias?",
+        options: ["Array", "Object", "String", "Boolean"],
+        answer: "Array"
+      },
+      {
+        question: "5. ¿Cómo se almacena una fecha en MongoDB?",
+        options: ["Date", "String", "Number", "Boolean"],
+        answer: "Date"
+      },
+      {
+        question: "6. ¿Cuál de los siguientes no es un tipo BSON?",
+        options: ["String", "Symbol", "Binary", "Function"],
+        answer: "Function"
+      },
+      {
+        question: "7. ¿Qué tipo usarías para almacenar verdadero o falso?",
+        options: ["Boolean", "String", "Number", "Date"],
+        answer: "Boolean"
+      },
+      {
+        question: "8. ¿Cuál es la diferencia principal entre JSON y BSON?",
+        options: ["JSON es binario, BSON es texto", "JSON es texto, BSON es binario", "Ambos son texto", "Ambos son binarios"],
+        answer: "JSON es texto, BSON es binario"
+      },
+      {
+        question: "9. ¿Qué tipo de dato usarías para un documento embebido?",
+        options: ["Object", "Array", "String", "Boolean"],
+        answer: "Object"
+      },
+      {
+        question: "10. ¿Cuál de estos ejemplos es un Array válido?",
+        options: ["{1,2,3}", "[1,2,3]", "(1,2,3)", "<1,2,3>"],
+        answer: "[1,2,3]"
+      }
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'mb-4 p-4 border rounded-lg bg-blue-50';
+      div.innerHTML = `<p class="font-semibold">${q.question}</p>
+        <div class="mt-2 space-y-2">
+          ${q.options.map(o => `<button class="btn btn-ghost w-full text-left option">${o}</button>`).join('')}
+        </div>
+        <p class="mt-2 small correct" style="display:none;color:green;">✅ Correcto!</p>
+        <p class="mt-2 small wrong" style="display:none;color:red;">❌ Incorrecto. La respuesta correcta es: <strong>${q.answer}</strong></p>
+      `;
+      quizContainer.appendChild(div);
+
+      div.querySelectorAll('.option').forEach(btn => {
+        btn.addEventListener('click', e => {
+          if(e.target.textContent === q.answer){
+            div.querySelector('.correct').style.display='block';
+            div.querySelector('.wrong').style.display='none';
+          }else{
+            div.querySelector('.correct').style.display='none';
+            div.querySelector('.wrong').style.display='block';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

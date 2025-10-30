@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Evaluación Final — MongoDB Atlas y JSON (Pedagógica)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --bg: linear-gradient(135deg,#f0f4f8 0%,#dfe9f3 100%);
+      --card: #ffffff;
+      --muted: #64748b;
+      --accent: #0ea5a4;
+      --accent-dark: #0369a1;
+    }
+    body { background: var(--bg); min-height:100vh; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: #0f172a; }
+    .card { background: var(--card); border-radius:14px; box-shadow: 0 10px 30px rgba(2,6,23,0.06); padding:1.25rem; margin-bottom:1rem; }
+    .option-btn { transition: transform .08s ease, box-shadow .08s ease; }
+    .option-btn:active { transform: translateY(1px); }
+    .correct { border-left:4px solid #16a34a; }
+    .wrong { border-left:4px solid #ef4444; }
+    .small { font-size:0.95rem; color:var(--muted); }
+    .explain { background:#f8fafc; padding:0.8rem; border-radius:8px; border:1px solid #e6eef2; margin-top:0.6rem; }
+    .topbar { position:sticky; top:0; z-index:40; backdrop-blur:6px; background:rgba(255,255,255,0.7); border-bottom:1px solid rgba(15,23,42,0.04); padding:0.75rem 1rem; }
+    .badge { display:inline-flex; gap:0.5rem; align-items:center; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:white; padding:0.4rem 0.7rem; border-radius:999px; font-weight:700; }
+    .conceal { display:none; }
+    @media (max-width:640px){ .grid-cols-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="px-4 py-8">
+
+  <header class="topbar mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="badge">MongoDB • Evaluación</div>
+      <div class="ml-2">
+        <div class="text-sm font-semibold">Evaluación Final — Introducción a MongoDB Atlas y JSON</div>
+        <div class="text-xs small">15 preguntas • Feedback pedagógico • Guarda progreso</div>
+      </div>
+    </div>
+    <div class="text-sm small">Duración sugerida: <strong>25–30 min</strong></div>
+  </header>
+
+  <main class="max-w-4xl mx-auto">
+
+    <section id="instructions" class="card">
+      <h2 class="text-lg font-semibold mb-2">Instrucciones</h2>
+      <p class="small">Lee cada pregunta con atención. El objetivo es demostrar comprensión y aprender en el proceso: al enviar verás una explicación pedagógica para cada respuesta. Tus respuestas se guardan en este navegador para que puedas continuar más tarde.</p>
+      <div class="mt-3 flex gap-2">
+        <button id="startBtn" class="px-4 py-2 rounded bg-gradient-to-r from-emerald-500 to-sky-600 text-white">Comenzar evaluación</button>
+        <button id="resetProgressBtn" class="px-4 py-2 rounded border" title="Borra respuestas guardadas">Borrar progreso</button>
+      </div>
+    </section>
+
+    <section id="quiz" class="conceal"></section>
+
+    <section id="result" class="card conceal">
+      <h2 class="text-2xl font-semibold mb-2">Resultado</h2>
+      <p id="score" class="text-lg font-medium"></p>
+      <p id="interpretation" class="small mt-2"></p>
+
+      <div id="actions" class="mt-4 flex flex-wrap gap-2">
+        <button id="retry" class="px-4 py-2 rounded bg-indigo-600 text-white">Reintentar</button>
+        <button id="download" class="px-4 py-2 rounded border">Descargar respuestas (CSV)</button>
+        <button id="printCert" class="px-4 py-2 rounded bg-emerald-600 text-white">Generar certificado (imprimir)</button>
+      </div>
+
+      <div id="certPreview" class="mt-4 conceal">
+        <div class="card">
+          <h3 class="text-lg font-semibold">Certificado (vista previa)</h3>
+          <div id="certContent" class="mt-2 small"></div>
+          <div class="mt-3"><button id="printNow" class="px-4 py-2 rounded bg-sky-600 text-white">Imprimir certificado</button></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center text-sm text-gray-500 mt-6">🌱 Curso — Introducción a MongoDB Atlas y JSON</footer>
+  </main>
+
+<script>
+/* ======================================================
+   Preguntas + explicaciones pedagógicas (en español)
+   ====================================================== */
+const questions = [
+  {
+    q: "1) ¿Qué ventaja principal ofrece MongoDB Atlas frente a instalar MongoDB en tu propio computador?",
+    opts: [
+      "A) Permite almacenar solo archivos JSON sin conexión a internet.",
+      "B) Evita preocuparse por la infraestructura y ofrece copias de seguridad automáticas.",
+      "C) No necesita autenticación para conectarse.",
+      "D) Solo funciona con datos relacionales."
+    ],
+    a: 1,
+    explain: "Atlas es un servicio gestionado en la nube. Se encarga de infraestructura, backups, actualizaciones y seguridad por defecto — ideal para concentrarse en datos y lógica de la aplicación."
+  },
+  {
+    q: "2) ¿Cuál es el primer paso para trabajar con MongoDB Atlas?",
+    opts: [
+      "A) Crear una colección.",
+      "B) Crear un cluster y un usuario.",
+      "C) Ejecutar comandos SQL.",
+      "D) Instalar Node.js."
+    ],
+    a: 1,
+    explain: "Primero creas un cluster (servidor) y un usuario con permisos. Después conectas tu app o Compass con la cadena de conexión."
+  },
+  {
+    q: "3) ¿Qué diferencia clave hay entre una tabla relacional y una colección de MongoDB?",
+    opts: [
+      "A) Las colecciones almacenan documentos flexibles, no filas fijas.",
+      "B) Las colecciones solo aceptan números.",
+      "C) Las tablas permiten más velocidad siempre.",
+      "D) No hay diferencias reales."
+    ],
+    a: 0,
+    explain: "Las colecciones admiten documentos con estructuras distintas; no requieren columnas fijas. Esto aporta flexibilidad para modelos ágiles y cambios frecuentes."
+  },
+  {
+    q: "4) Si en SQL tienes una tabla 'clientes' con columnas nombre y edad, su equivalente en MongoDB sería:",
+    opts: [
+      "A) Una base de datos llamada clientes.",
+      "B) Una colección llamada 'clientes' con documentos {nombre, edad}.",
+      "C) Un archivo .sql.",
+      "D) Una tabla JSON."
+    ],
+    a: 1,
+    explain: "MongoDB usa colecciones (similar a tabla) y documentos (similares a filas). Ejemplo: { 'nombre':'Ana', 'edad':28 }."
+  },
+  {
+    q: "5) ¿Cuál de los siguientes NO es un tipo de dato nativo en BSON?",
+    opts: [
+      "A) String",
+      "B) Number",
+      "C) Array",
+      "D) Excel"
+    ],
+    a: 3,
+    explain: "BSON admite strings, números, arrays y muchos tipos más (ObjectId, Date, Binary). 'Excel' no es un tipo nativo — serían archivos binarios guardados de otra forma."
+  },
+  {
+    q: "6) ¿Por qué MongoDB usa BSON en lugar de solo JSON?",
+    opts: [
+      "A) Porque BSON se guarda en texto plano.",
+      "B) Porque BSON permite datos binarios y es más rápido al consultar.",
+      "C) Porque JSON no puede tener números.",
+      "D) Porque BSON es menos eficiente."
+    ],
+    a: 1,
+    explain: "BSON es una representación binaria que permite tipos adicionales (fechas, binarios) y acceso más rápido en almacenamiento y red."
+  },
+  {
+    q: "7) ¿Qué hace la consulta db.usuarios.find({edad: {$gt: 25}})?",
+    opts: [
+      "A) Busca usuarios con edad igual a 25.",
+      "B) Busca usuarios menores de 25.",
+      "C) Busca usuarios con edad mayor que 25.",
+      "D) Elimina usuarios mayores de 25."
+    ],
+    a: 2,
+    explain: "$gt significa 'greater than' (mayor que). La consulta devuelve documentos con edad > 25."
+  },
+  {
+    q: "8) ¿Qué función cumple 'projection' en una consulta?",
+    opts: [
+      "A) Eliminar registros duplicados.",
+      "B) Indicar qué campos mostrar del resultado.",
+      "C) Cambiar el tipo de dato.",
+      "D) Ordenar los resultados."
+    ],
+    a: 1,
+    explain: "La proyección selecciona los campos a devolver. Ej: db.usuarios.find({}, {nombre:1, _id:0}) muestra solo nombre."
+  },
+  {
+    q: "9) ¿Para qué sirve el operador $group dentro del pipeline de agregación?",
+    opts: [
+      "A) Ordenar resultados.",
+      "B) Agrupar datos por un campo, como ciudad o edad.",
+      "C) Eliminar índices duplicados.",
+      "D) Filtrar campos vacíos."
+    ],
+    a: 1,
+    explain: "$group permite calcular totales, promedios, contar elementos por categorías — similar a GROUP BY en SQL."
+  },
+  {
+    q: "10) ¿Qué hace el operador $match dentro de una agregación?",
+    opts: [
+      "A) Filtrar documentos según condiciones.",
+      "B) Crear nuevos índices.",
+      "C) Calcular promedios.",
+      "D) Insertar nuevos registros."
+    ],
+    a: 0,
+    explain: "$match filtra documentos (como WHERE). Suele colocarse al inicio del pipeline para reducir datos procesados."
+  },
+  {
+    q: "11) ¿Qué necesitas para conectar tu aplicación a Atlas?",
+    opts: [
+      "A) La URL de conexión (Connection String).",
+      "B) Solo el nombre del cluster.",
+      "C) Un puerto local abierto.",
+      "D) Un archivo CSV."
+    ],
+    a: 0,
+    explain: "La cadena de conexión incluye usuario, contraseña y la dirección del cluster. Ej.: mongodb+srv://usuario:clave@cluster.mongodb.net"
+  },
+  {
+    q: "12) ¿Qué lenguaje puede conectarse a MongoDB Atlas?",
+    opts: [
+      "A) Solo JavaScript.",
+      "B) Cualquier lenguaje con driver oficial (Node, Python, Java, etc.).",
+      "C) Solo Python.",
+      "D) Solo SQL."
+    ],
+    a: 1,
+    explain: "MongoDB tiene drivers oficiales para muchos lenguajes: Node, Python, Java, C#, Go, etc. Elige el driver según tu stack."
+  },
+  {
+    q: "13) En Atlas, ¿qué significa agregar la IP 0.0.0.0/0 en la lista de acceso?",
+    opts: [
+      "A) Permitir el acceso solo desde Colombia.",
+      "B) Permitir el acceso desde cualquier lugar del mundo (solo recomendable en desarrollo).",
+      "C) Bloquear todas las conexiones.",
+      "D) Mejorar la velocidad de conexión."
+    ],
+    a: 1,
+    explain: "0.0.0.0/0 es un comodín que permite todas las IPs. Es útil para pruebas rápidas, pero peligroso en producción porque abre el servicio a todo el mundo; siempre sustituir por IPs de confianza."
+  },
+  {
+    q: "14) ¿Qué función cumple un índice en MongoDB?",
+    opts: [
+      "A) Acelerar búsquedas en campos específicos.",
+      "B) Almacenar contraseñas.",
+      "C) Reducir espacio en disco.",
+      "D) Eliminar duplicados automáticamente."
+    ],
+    a: 0,
+    explain: "Los índices permiten acceder rápidamente a documentos por campo (como índice en un libro). Diseña índices en los campos que consultas frecuentemente."
+  },
+  {
+    q: "15) ¿Qué ventaja tiene usar MongoDB Compass frente a la consola?",
+    opts: [
+      "A) Permite visualizar y explorar datos con interfaz gráfica.",
+      "B) Solo sirve para programar en JavaScript.",
+      "C) No permite crear índices.",
+      "D) Es más lenta que la consola."
+    ],
+    a: 0,
+    explain: "Compass es una GUI oficial para explorar colecciones, editar documentos, crear índices y construir pipelines visualmente — ideal para aprendizaje y depuración."
+  }
+];
+
+/* ======================================================
+   Estado, renderizado y lógica
+   ====================================================== */
+const quizEl = document.getElementById('quiz');
+const startBtn = document.getElementById('startBtn');
+const resetProgressBtn = document.getElementById('resetProgressBtn');
+const resultEl = document.getElementById('result');
+const scoreEl = document.getElementById('score');
+const interpEl = document.getElementById('interpretation');
+const retryBtn = document.getElementById('retry');
+const downloadBtn = document.getElementById('download');
+const printCertBtn = document.getElementById('printCert');
+const certPreview = document.getElementById('certPreview');
+const certContent = document.getElementById('certContent');
+const printNowBtn = document.getElementById('printNow');
+
+let state = {
+  answers: Array(questions.length).fill(null),
+  scored: false
+};
+
+const STORAGE_KEY = 'eval_mongodb_v2_respuestas';
+
+// helpers
+function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.answers)); }
+function loadProgress(){
+  const s = localStorage.getItem(STORAGE_KEY);
+  if (s) {
+    try {
+      const arr = JSON.parse(s);
+      if (Array.isArray(arr) && arr.length === questions.length) state.answers = arr;
+    } catch(e){}
+  }
+}
+function clearProgress(){
+  localStorage.removeItem(STORAGE_KEY);
+  state.answers = Array(questions.length).fill(null);
+  state.scored = false;
+  renderQuiz();
+  hideResult();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Render */
+function renderQuiz(){
+  quizEl.classList.remove('conceal');
+  quizEl.innerHTML = '';
+  questions.forEach((it, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = `q${i}`;
+    card.innerHTML = `
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-lg font-semibold">Pregunta ${i+1}</h3>
+          <p class="small mt-1">${it.q}</p>
+        </div>
+        <div class="text-xs small text-right">Módulo ${mapModule(i)}</div>
+      </div>
+      <div class="mt-4 grid gap-2" id="opts${i}"></div>
+      <div class="mt-3 small" id="fb${i}"></div>
+    `;
+    quizEl.appendChild(card);
+
+    const optsEl = card.querySelector(`#opts${i}`);
+    it.opts.forEach((o, j) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn w-full text-left px-4 py-2 rounded border border-gray-100 hover:shadow';
+      btn.innerText = o;
+      btn.addEventListener('click', () => selectOption(i, j));
+      optsEl.appendChild(btn);
+    });
+
+    // show explanation toggle area
+    const fb = card.querySelector(`#fb${i}`);
+    fb.innerHTML = `<div class="flex items-center gap-2"><button class="px-3 py-1 text-sm rounded bg-slate-50" data-show="${i}">Ver explicación</button><span class="small text-gray-500"> (se ve después de responder o al hacer clic)</span></div>
+      <div id="exp${i}" class="explain conceal"></div>`;
+    fb.querySelector('button').addEventListener('click', () => showExplanation(i));
+  });
+
+  // footer actions
+  const actions = document.createElement('div');
+  actions.className = 'card flex items-center justify-between';
+  actions.innerHTML = `
+    <div class="flex gap-2 items-center">
+      <button id="submitBtn" class="px-4 py-2 rounded bg-indigo-600 text-white">Enviar evaluación</button>
+      <button id="clearBtn" class="px-4 py-2 rounded border">Limpiar respuestas</button>
+      <div class="small text-gray-600 ml-4">Progreso: <span id="progress">0/${questions.length}</span></div>
+    </div>
+    <div class="text-sm small text-gray-500">Al enviar verás explicaciones pedagógicas por pregunta.</div>
+  `;
+  quizEl.appendChild(actions);
+
+  document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if (confirm('¿Deseas borrar todas las respuestas guardadas y empezar de nuevo?')) {
+      state.answers = Array(questions.length).fill(null);
+      saveProgress();
+      renderQuiz();
+    }
+  });
+
+  // load previous progress
+  loadProgress();
+  // restore selected UI
+  state.answers.forEach((ans, idx) => { if (ans !== null) renderSelection(idx); });
+  updateProgress();
+}
+
+/* Map pregunta -> módulo (para mostrar etiqueta) */
+function mapModule(i){
+  if (i <= 1) return '1';
+  if (i <= 3) return '2';
+  if (i <= 5) return '3';
+  if (i <= 7) return '4';
+  if (i <= 9) return '5';
+  if (i <= 11) return '6';
+  if (i === 12) return '7';
+  return '8';
+}
+
+/* Selección */
+function selectOption(qIdx, optIdx){
+  if (state.scored) return; // no cambiar después de enviar
+  state.answers[qIdx] = optIdx;
+  saveProgress();
+  renderSelection(qIdx);
+  updateProgress();
+}
+
+/* Mostrar selección visual */
+function renderSelection(qIdx){
+  const card = document.getElementById(`q${qIdx}`);
+  if (!card) return;
+  const opts = card.querySelectorAll('.option-btn');
+  opts.forEach((btn, i) => {
+    btn.classList.remove('bg-slate-50','border-slate-200');
+    if (state.answers[qIdx] === i) btn.classList.add('bg-slate-50','border-slate-200');
+  });
+}
+
+/* Mostrar explicación (si ya respondió o por clic) */
+function showExplanation(qIdx){
+  const expEl = document.getElementById(`exp${qIdx}`);
+  expEl.classList.remove('conceal');
+  expEl.innerHTML = `<strong>Explicación pedagógica:</strong><div class="small mt-2">${questions[qIdx].explain}</div>`;
+  // scroll into view
+  expEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* Enviar y calificar */
+function submitQuiz(){
+  if (!state.answers.some(a => a !== null)) {
+    alert('No hay respuestas. Contesta las preguntas antes de enviar.');
+    return;
+  }
+  if (state.answers.includes(null)) {
+    if (!confirm('Hay respuestas sin contestar. ¿Deseas enviar igual?')) return;
+  }
+
+  state.scored = true;
+  let score = 0;
+  questions.forEach((q, idx) => {
+    const chosen = state.answers[idx];
+    const card = document.getElementById(`q${idx}`);
+    const opts = card.querySelectorAll('.option-btn');
+    const exp = document.getElementById(`exp${idx}`);
+    // disable buttons
+    opts.forEach((btn, i) => {
+      btn.disabled = true;
+      btn.classList.remove('bg-slate-50');
+      if (i === q.a) {
+        btn.classList.add('bg-green-50','border-green-200');
+      }
+      if (chosen === i && chosen !== q.a) {
+        btn.classList.add('bg-red-50','border-red-200');
+      }
+    });
+    if (chosen === q.a) {
+      score++;
+      card.classList.add('correct');
+    } else {
+      card.classList.add('wrong');
+    }
+    // show explanation for every question
+    exp.classList.remove('conceal');
+    exp.innerHTML = `<strong>Explicación pedagógica:</strong><div class="small mt-2">${q.explain}</div>`;
+  });
+
+  // mostrar resultado
+  showResult(score);
+  saveProgress(); // persist
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Mostrar resultado final */
+function showResult(score){
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+  scoreEl.innerText = `Obtuviste ${score} de ${total} — ${pct}%`;
+  interpEl.innerText = interpretScore(pct);
+
+  // habilitar acciones
+  resultEl.classList.remove('conceal');
+
+  // download and print actions
+  downloadBtn.onclick = () => downloadCSV(score, pct);
+  retryBtn.onclick = () => {
+    if (!confirm('¿Reintentar? Esto borrará el resultado actual en la vista, pero tus respuestas seguirán guardadas en el navegador.')) return;
+    state.scored = false;
+    // re-enable buttons but keep answers for review
+    questions.forEach((_, idx) => {
+      const card = document.getElementById(`q${idx}`);
+      if (!card) return;
+      const opts = card.querySelectorAll('.option-btn');
+      opts.forEach(btn => btn.disabled = false);
+      card.classList.remove('correct','wrong');
+    });
+    resultEl.classList.add('conceal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  printCertBtn.onclick = () => {
+    if (pct < 80) {
+      if (!confirm('La puntuación es menor al 80%. Aun así, ¿deseas generar un certificado de participación (no certificado de dominio)?')) return;
+    }
+    generateCertificate(score, pct);
+  };
+}
+
+/* Interpretación pedagógica */
+function interpretScore(p){
+  if (p >= 87) return "🌟 Excelente — Dominio sólido. Puedes avanzar a temas avanzados (índices compuestos, shardings básicos, pipelines complejos).";
+  if (p >= 67) return "✅ Bueno — Comprensión adecuada. Revisa un par de conceptos y practica más ejercicios prácticos.";
+  if (p >= 40) return "🔁 Suficiente — Tienes nociones, pero conviene repasar CRUD, agregaciones y seguridad básica.";
+  return "🔍 Reforzar — Revisa los módulos 1–4 y practica en Atlas/Compass con ejercicios guiados.";
+}
+
+/* Descargar CSV */
+function downloadCSV(score, pct){
+  const rows = [["Pregunta","Respuesta seleccionada","Respuesta correcta","Correcto?","Explicación"]];
+  questions.forEach((q, i) => {
+    const sel = state.answers[i] === null ? '' : q.opts[state.answers[i]];
+    const corr = q.opts[q.a];
+    const ok = state.answers[i] === q.a ? 'sí' : 'no';
+    rows.push([`P${i+1}`, sel.replace(/"/g,'""'), corr.replace(/"/g,'""'), ok, q.explain.replace(/"/g,'""')]);
+  });
+  rows.push([]);
+  rows.push(["Puntaje", `${score}/${questions.length}`, `${pct}%`]);
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'evaluacion_mongodb_resultados.csv';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* Certificado simple (vista previa e impresión) */
+function generateCertificate(score, pct){
+  const name = prompt("Nombre para el certificado (dejar vacío para usar 'Participante')") || "Participante";
+  const date = new Date().toLocaleDateString();
+  const level = pct >= 80 ? "Conocimiento avanzado" : (pct >= 67 ? "Buen conocimiento" : "Participación");
+  const html = `
+    <div style="font-family:Inter,Arial; padding:24px; text-align:center;">
+      <h1 style="font-size:28px; margin-bottom:6px;">Certificado de finalización</h1>
+      <p style="margin:0; color:#475569;">Curso: Introducción a MongoDB Atlas y JSON</p>
+      <div style="margin-top:18px; padding:18px; border-radius:8px; background:#f8fafc; border:1px solid #e6eef2;">
+        <h2 style="margin:0; font-size:22px;">${name}</h2>
+        <p style="margin:6px 0 0 0; color:#334155;">Ha completado la evaluación final con <strong>${score}/${questions.length}</strong> (${pct}%).</p>
+        <p style="margin:6px 0 0 0; color:#334155;">Nivel: <strong>${level}</strong></p>
+      </div>
+      <p style="margin-top:18px; color:#64748b;">Emitido el ${date}</p>
+      <div style="margin-top:28px; display:flex; justify-content:center; gap:20px;">
+        <div style="text-align:center;">
+          <div style="width:120px; height:60px; border-bottom:2px solid #0ea5a4;"></div>
+          <div style="font-size:12px; color:#475569; margin-top:6px;">Instructor</div>
+        </div>
+      </div>
+    </div>
+  `;
+  certContent.innerHTML = html;
+  certPreview.classList.remove('conceal');
+  document.getElementById('certPreview').scrollIntoView({ behavior: 'smooth' });
+
+  printNowBtn.onclick = () => {
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    printWindow.document.write(`<html><head><title>Certificado</title></head><body>${html}</body></html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); }, 500);
+  };
+}
+
+/* UI control */
+function updateProgress(){
+  const done = state.answers.filter(a => a !== null).length;
+  const pEl = document.getElementById('progress');
+  if (pEl) pEl.innerText = `${done}/${questions.length}`;
+}
+function hideResult(){ resultEl.classList.add('conceal'); }
+
+/* Eventos iniciales */
+startBtn.addEventListener('click', () => {
+  startBtn.innerText = 'Continuar evaluación';
+  renderQuiz();
+  window.scrollTo({ top: 140, behavior: 'smooth' });
+});
+resetProgressBtn.addEventListener('click', () => {
+  if (confirm('¿Borrar las respuestas guardadas en este navegador?')) clearProgress();
+});
+
+/* Carga */
+loadProgress();
+// if there is progress, show an option to continue automatically
+if (state.answers.some(a => a !== null)) {
+  // show a small prompt (native) to continue
+  // auto-enable start
+  startBtn.innerText = 'Continuar evaluación guardada';
+}
+
+/* Expose selectOption for console testing if needed */
+window._qa = { state, questions };
+
+</script>
+</body>
+</html>

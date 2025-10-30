@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🧩 Módulo 7 — MongoDB Atlas Básico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, sans-serif; background:#f5f9fb; color:#0f172a; line-height:1.6; }
+    .card { background:white; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); padding:1rem; margin-bottom:1rem; }
+    pre.code { background:#0b1220; color:#e6f3f1; padding:0.8rem; border-radius:8px; overflow:auto; font-family:monospace; }
+    code.inline { background:rgba(3,105,161,0.1); padding:2px 6px; border-radius:6px; }
+  </style>
+</head>
+<body class="max-w-3xl mx-auto p-6">
+
+  <h1 class="text-2xl font-bold mb-4">🧩 Módulo 7 — Seguridad, Índices y Rendimiento</h1>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">1️⃣ Seguridad básica en Atlas</h2>
+    <ul class="list-disc pl-5">
+      <li>MongoDB Atlas protege datos con autenticación, autorización y cifrado.</li>
+      <li>Crear usuario para tu app:
+        <pre class="code">use admin
+db.createUser({
+  user: "appUser",
+  pwd: "MiClaveSegura2025",
+  roles: ["readWrite","dbAdmin"]
+})</pre>
+      </li>
+      <li>Roles principales: <code class="inline">read</code>, <code class="inline">readWrite</code>, <code class="inline">dbAdmin</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">2️⃣ Control de acceso por IP</h2>
+    <ul class="list-disc pl-5">
+      <li>Atlas solo permite conexiones desde IPs autorizadas.</li>
+      <li>Para pruebas puedes usar: <kbd>0.0.0.0/0</kbd> (todos los IPs) ✅ solo en desarrollo.</li>
+      <li>En producción: usar solo IPs de servidores confiables.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">3️⃣ Índices</h2>
+    <p>Mejoran la velocidad de búsqueda evitando escaneo completo.</p>
+    <pre class="code">db.usuarios.createIndex({ ciudad:1 })  // índice simple
+db.usuarios.createIndex({ ciudad:1, edad:-1 }) // índice compuesto
+db.usuarios.createIndex({ correo:1 }, {unique:true}) // índice único</pre>
+  </div>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">4️⃣ Revisar consultas</h2>
+    <p>Usar <code class="inline">explain()</code> para ver si se usan índices:</p>
+    <pre class="code">db.usuarios.find({ ciudad:"Bogotá" }).explain("executionStats")</pre>
+  </div>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">5️⃣ Buenas prácticas rápidas</h2>
+    <ul class="list-disc pl-5">
+      <li>No usar usuarios <code class="inline">root/admin</code> para apps.</li>
+      <li>Cambiar contraseñas regularmente.</li>
+      <li>No exponer puerto 27017 públicamente.</li>
+      <li>Monitorear rendimiento con Performance Advisor y Real Time Panel.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="font-semibold mb-2">6️⃣ Resumen esencial</h2>
+    <ul class="list-disc pl-5">
+      <li>Usuarios y roles → control de acceso</li>
+      <li>Whitelist de IP → conexiones seguras</li>
+      <li>Índices → mejorar velocidad de búsqueda</li>
+      <li><code class="inline">explain()</code> → revisar consultas</li>
+      <li>Performance Advisor → sugerencias de índices</li>
+    </ul>
+  </div>
+
+    <!-- Footer / Navegación -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+      <div class="flex gap-3">
+        <a href="../index.html" class="btn btn-ghost">Volver al índice</a>
+      </div>
+    </div>
+
+    <footer class="mt-10 text-center text-sm text-gray-500">🌱 Curso Sincrónico — Introducción a MongoDB Atlas</footer>
+
+
+  </main>
+
+<script>
+  const markBtn = document.getElementById('markDoneTop');
+  markBtn.addEventListener('click', () => {
+    const pressed = markBtn.getAttribute('aria-pressed') === 'true';
+    markBtn.setAttribute('aria-pressed', (!pressed).toString());
+    markBtn.textContent = !pressed ? 'Completado ✅' : 'Marcar completado ✅';
+    markBtn.classList.toggle('btn-primary');
+  });
+</script>
+
+</body>
+</html>

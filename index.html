@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🌱 Curso MongoDB Atlas y JSON — Inicio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f4f8 0%, #dfe9f3 100%);
+      min-height: 100vh;
+    }
+    .module-card {
+      transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s;
+      position: relative;
+    }
+    .module-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(2,6,23,0.08);
+    }
+    .icon {
+      width:48px;
+      height:48px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      font-size: 1.5rem;
+    }
+    .status-badge {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+    .status-completed { background-color: #16a34a; color: white; }
+    .status-progress { background-color: #f59e0b; color: white; }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-start px-6 py-12">
+
+  <header class="text-center mb-10">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3">🌱 Curso: Introducción a MongoDB Atlas y JSON</h1>
+    <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+      Aprende paso a paso desde los fundamentos de las bases de datos NoSQL hasta la exploración visual con Compass.
+    </p>
+  </header>
+
+  <main id="modules-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full">
+    <!-- Módulos generados dinámicamente -->
+  </main>
+
+  <footer class="mt-12 text-center text-gray-500 text-base max-w-2xl mx-auto">
+    <p>📘 Curso virtual — Versión Educativa 2025</p>
+  </footer>
+
+  <script>
+    const modules = [
+      { id: 1, color: 'green', emoji: '🌱', title: 'Introducción a MongoDB y JSON', time: '3 h', level: 'Principiante' },
+      { id: 2, color: 'sky', emoji: '🔁', title: 'De lo relacional a lo documental', time: '3 h', level: 'Principiante' },
+      { id: 3, color: 'indigo', emoji: '🔎', title: 'Tipos de datos básicos en MongoDB', time: '4 h', level: 'Principiante' },
+      { id: 4, color: 'emerald', emoji: '🛠️', title: 'CRUD básico en MongoDB', time: '4 h', level: 'Principiante' },
+      { id: 5, color: 'rose', emoji: '🧩', title: 'Consultas avanzadas y operadores', time: '4 h', level: 'Principiante' },
+      { id: 6, color: 'yellow', emoji: '📊', title: 'Agregaciones y pipelines', time: '4 h', level: 'Principiante' },
+      { id: 7, color: 'cyan', emoji: '⚙️', title: 'Seguridad, índices y rendimiento', time: '3 h', level: 'Principiante' },
+      { id: 8, color: 'violet', emoji: '🧭', title: 'MongoDB Compass — Exploración visual', time: '3 h', level: 'Principiante' }
+    ];
+
+    const container = document.getElementById('modules-container');
+
+    const colorMap = {
+      green: '#16a34a',
+      sky: '#0ea5e9',
+      indigo: '#4f46e5',
+      emerald: '#10b981',
+      rose: '#f43f5e',
+      yellow: '#facc15',
+      cyan: '#06b6d4',
+      violet: '#8b5cf6'
+    };
+
+    function renderModules() {
+      container.innerHTML = "";
+      modules.forEach(mod => {
+        const status = localStorage.getItem(`modulo${mod.id}_estado`) || 'progress';
+        const badgeClass = status === 'completed' ? 'status-completed' : 'status-progress';
+        const badgeText = status === 'completed' ? '✅ Completado' : '🔄 En progreso';
+        const toggleText = status === 'completed' ? 'Desmarcar' : 'Marcar ✅';
+
+        const html = `
+          <div class="module-card bg-white p-6 rounded-2xl shadow hover:shadow-lg flex flex-col justify-between" data-id="${mod.id}">
+            <span class="status-badge ${badgeClass}">${badgeText}</span>
+            <div class="flex items-start gap-4">
+              <div class="icon" style="background-color: ${colorMap[mod.color]}">${mod.emoji}</div>
+              <div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-1">Módulo ${mod.id}</h2>
+                <p class="text-gray-700 text-lg">${mod.title}</p>
+              </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between">
+              <span class="text-sm text-gray-600">Duración: ${mod.time} • Nivel: ${mod.level}</span>
+              <div class="flex gap-2">
+                <button class="px-3 py-2 rounded-lg text-sm text-white" style="background-color: ${colorMap[mod.color]}" data-action="open">Abrir</button>
+                <button class="px-3 py-2 rounded-lg text-sm text-white" style="background-color: ${colorMap[mod.color]}" data-action="toggle">${toggleText}</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+
+      // Eventos
+      container.querySelectorAll('button[data-action="open"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const card = e.target.closest('.module-card');
+          const id = card.dataset.id;
+          localStorage.setItem(`modulo${id}_estado`, 'completed');
+          renderModules();
+          window.location.href = `modulos/modulo${id}.html`;
+        });
+      });
+
+      container.querySelectorAll('button[data-action="toggle"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const card = e.target.closest('.module-card');
+          const id = card.dataset.id;
+          const current = localStorage.getItem(`modulo${id}_estado`);
+          localStorage.setItem(`modulo${id}_estado`, current === 'completed' ? 'progress' : 'completed');
+          renderModules();
+        });
+      });
+    }
+
+    renderModules();
+
+    // Detectar cambios desde otras pestañas y actualizar automáticamente
+    window.addEventListener('storage', () => {
+      renderModules();
+    });
+  </script>
+</body>
+</html>
