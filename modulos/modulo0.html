@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧩 MÓDULO 0 — Introducción a MongoDB y Herramientas</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root{
+  --brand-1:#0ea5a4;
+  --brand-2:#0369a1;
+  --muted:#374151;
+  --bg-warm:#f5f9fb;
+  --code-bg:#0b1220;
+}
+body{
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height:1.6;
+  background: var(--bg-warm);
+  color:#0f172a;
+}
+.card{background:white;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
+pre.code{
+  background: var(--code-bg);
+  color: #e6f3f1;
+  padding:1rem;
+  border-radius:10px;
+  overflow:auto;
+  font-family: ui-monospace, monospace;
+}
+code.inline{
+  background: rgba(3,105,161,0.06);
+  padding:0.12rem 0.45rem;
+  border-radius:6px;
+  font-family: ui-monospace, monospace;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.5rem .9rem;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:active{transform: translateY(1px);}
+.btn-primary{background:linear-gradient(90deg,var(--brand-1),var(--brand-2));color:white;box-shadow:0 8px 20px rgba(3,105,161,0.12);}
+.btn-ghost{background:white;border:1px solid rgba(3,105,161,0.08);color:var(--brand-2);}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100">
+<nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+  <a href="../index.html" class="flex items-center gap-2">
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:linear-gradient(180deg,var(--brand-1),var(--brand-2));">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 6 7 11C7 15 11 20 12 22C13 20 17 15 17 11C17 6 12 2 12 2Z" fill="white"/></svg>
+    </div>
+    <span class="font-semibold text-lg text-slate-800">Curso MongoDB</span>
+  </a>
+  <div class="flex items-center gap-3 text-sm font-medium">
+    <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 0</a>
+    <a href="../modulos/modulo1.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 1</a>
+    <a href="../modulos/modulo2.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 2</a>
+    <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
+    <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
+    <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
+  </div>
+</nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-10">
+
+<!-- Header -->
+<section class="mb-8 text-center">
+  <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🧩 Módulo 0 — Entorno y herramientas y Herramientas</h1>
+  <p class="text-lg text-gray-600 mt-2">Duración: <strong>2 horas</strong> • Nivel: <strong>Básico</strong></p>
+  <div class="mt-4 flex items-center justify-center gap-3">
+    <button class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
+  </div>
+</section>
+
+<!-- Objetivos -->
+<section class="card p-6 mb-6">
+<h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
+<ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
+<li>Conocer MongoDB y sus ventajas frente a bases de datos relacionales.</li>
+<li>Familiarizarse con MongoDB Atlas, Compass y Playground.</li>
+<li>Configurar un entorno básico para practicar consultas MongoDB.</li>
+<li>Realizar tus primeros documentos, colecciones y bases de datos.</li>
+</ul>
+</section>
+
+<!-- 1. Qué es MongoDB -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">1. ¿Qué es MongoDB?</h4>
+<p class="text-gray-700 mb-2">
+MongoDB es una base de datos <strong>no relacional</strong>, orientada a documentos, que permite almacenar información en formato <code class="inline">JSON</code> o <code class="inline">BSON</code>. A diferencia de SQL, no requiere un esquema rígido, lo que facilita cambios y escalabilidad.
+</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Datos almacenados en <strong>documentos</strong> dentro de <strong>colecciones</strong>.</li>
+<li>Permite <strong>diseño embebido</strong> o <strong>referencial</strong> según la necesidad.</li>
+<li>Ideal para aplicaciones modernas que requieren velocidad y flexibilidad.</li>
+</ul>
+<p class="text-gray-700 mt-2">Más información oficial: <a href="https://www.mongodb.com/docs/" target="_blank" class="text-blue-600 underline">https://www.mongodb.com/docs/</a></p>
+</section>
+
+<!-- 2. MongoDB Atlas -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">2. MongoDB Atlas</h4>
+<p class="text-gray-700 mb-2"><strong>Definición:</strong> Atlas es la plataforma en la nube de MongoDB, donde puedes crear bases de datos sin instalar software localmente.</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Crear cuenta gratuita en <a href="https://www.mongodb.com/cloud/atlas" target="_blank" class="text-blue-600 underline">https://www.mongodb.com/cloud/atlas</a></li>
+<li>Configurar clúster gratuito (Shared Cluster).</li>
+<li>Agregar tu IP en <strong>Network Access → Add IP Address</strong>.</li>
+<li>Obtener <strong>connection string</strong> para conectarte desde Compass o tu aplicación.</li>
+</ul>
+</section>
+
+<!-- 3. MongoDB Compass -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">3. MongoDB Compass</h4>
+<p class="text-gray-700 mb-2"><strong>Definición:</strong> Compass es la interfaz gráfica oficial de MongoDB para explorar colecciones, documentos y esquemas sin usar la terminal.</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Descargar e instalar desde <a href="https://www.mongodb.com/try/download/compass" target="_blank" class="text-blue-600 underline">https://www.mongodb.com/try/download/compass</a></li>
+<li>Conectar a tu clúster de Atlas usando la cadena de conexión.</li>
+<li>Explorar bases de datos, colecciones y documentos visualmente.</li>
+<li>Crear, editar y eliminar documentos fácilmente.</li>
+</ul>
+</section>
+
+<!-- 4. MongoDB Playground -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">4. MongoDB Playground</h4>
+<p class="text-gray-700 mb-2"><strong>Definición:</strong> Playground es un entorno de pruebas dentro de Atlas que permite experimentar con queries y agregaciones desde el navegador.</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Se accede desde Atlas → <strong>Collections → Playground</strong></li>
+<li>Ideal para practicar sin instalar MongoDB localmente</li>
+<li>Permite ejecutar <code class="inline">insertOne</code>, <code class="inline">find</code>, <code class="inline">aggregate</code> y otras operaciones</li>
+<li>Útil para aprender y verificar tus consultas antes de usar en código real</li>
+</ul>
+</section>
+
+<!-- 5. Primeros pasos prácticos -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">5. Primeros pasos prácticos</h4>
+<p class="text-gray-700 mb-2">Ejemplo de creación de base de datos y colección en Playground:</p>
+<pre class="code">
+use miPrimeraBD;
+
+db.clientes.insertOne({
+  "nombre": "Ana Pérez",
+  "correo": "ana.perez@email.com",
+  "edad": 28
+});
+
+db.clientes.find();
+</pre>
+<p class="text-gray-700">Este ejemplo:</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Crea la base de datos <code class="inline">miPrimeraBD</code></li>
+<li>Inserta un documento en la colección <code class="inline">clientes</code></li>
+<li>Consulta los documentos existentes</li>
+</ul>
+</section>
+
+<!-- 6. Recomendaciones y buenas prácticas -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">6. Buenas prácticas iniciales</h4>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Guardar la <strong>cadena de conexión</strong> de Atlas de forma segura.</li>
+<li>Practicar creando documentos y colecciones desde Compass antes de programar.</li>
+<li>Usar Playground para probar consultas complejas antes de integrarlas en aplicaciones.</li>
+<li>Aprender a decidir cuándo usar <strong>diseño embebido</strong> o <strong>referencial</strong>.</li>
+</ul>
+</section>
+
+<!-- 7. Quiz interactivo -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">📝 Quiz rápido — Módulo 0</h4>
+
+<div class="space-y-4">
+
+<div>
+<p class="font-semibold">1. ¿Qué tipo de base de datos es MongoDB?</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q1" value="A"> Relacional</label>
+<label><input type="radio" name="q1" value="B"> Documental</label>
+<label><input type="radio" name="q1" value="C"> Columna</label>
+</div>
+</div>
+
+<div>
+<p class="font-semibold">2. MongoDB Compass sirve para:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q2" value="A"> Administrar documentos visualmente</label>
+<label><input type="radio" name="q2" value="B"> Ejecutar solo queries desde la terminal</label>
+</div>
+</div>
+
+<div>
+<p class="font-semibold">3. Playground permite:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q3" value="A"> Probar queries sin instalar MongoDB localmente</label>
+<label><input type="radio" name="q3" value="B"> Solo editar documentos en Compass</label>
+</div>
+</div>
+
+<div>
+<p class="font-semibold">4. Un documento en MongoDB es equivalente a:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q4" value="A"> Una fila</label>
+<label><input type="radio" name="q4" value="B"> Una tabla</label>
+</div>
+</div>
+
+<div>
+<p class="font-semibold">5. La clave primaria en MongoDB se llama:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q5" value="A"> _id</label>
+<label><input type="radio" name="q5" value="B"> id</label>
+</div>
+</div>
+
+<button class="btn btn-primary mt-2" onclick="checkQuiz()">Verificar respuestas</button>
+<div id="quizResult" class="mt-2 font-semibold"></div>
+</div>
+</section>
+
+<!-- Reflexión final -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
+<ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
+<li>MongoDB ofrece flexibilidad frente a SQL, pero no reemplaza completamente las bases relacionales.</li>
+<li>Decidir entre diseño embebido y referencial es clave según el tipo de consultas.</li>
+<li>Familiarizarse con Atlas, Compass y Playground facilita la práctica y aprendizaje.</li>
+</ul>
+</section>
+
+<footer class="mt-10 text-center text-sm text-gray-500">
+  <p>📘 Guía de apoyo educativo — Versión 2025
+    Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
+</footer>
+</main>
+
+<script>
+function checkQuiz(){
+  const answers = {q1:'B',q2:'A',q3:'A',q4:'A',q5:'A'};
+  let score = 0;
+  for(let i=1;i<=5;i++){
+    const val = document.querySelector('input[name="q'+i+'"]:checked')?.value;
+    if(val===answers['q'+i]) score++;
+  }
+  document.getElementById('quizResult').innerText = `Respuestas correctas: ${score}/5`;
+}
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>📊 MÓDULO 4 — Consultas avanzadas y operadores en MongoDB</title>
+  <title>🧩 MÓDULO 6 — Consultas avanzadas, agregaciones y pipeline</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -69,13 +69,12 @@
       </div>
 
       <div class="flex items-center gap-3 text-sm font-medium">
+        <a href="../modulos/modulo0.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 0</a>
         <a href="../modulos/modulo1.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 1</a>
         <a href="../modulos/modulo2.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 2</a>
         <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
         <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
         <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 5</a>
-        <a href="../modulos/modulo6.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 6</a>
-        <a href="../modulos/modulo7.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 7</a>
       </div>
     </nav>
   </header>
@@ -84,23 +83,11 @@
 
     <!-- Header / Hero -->
     <section class="mb-8 text-center">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">📊 MÓDULO 5 — Consultas avanzadas y operadores en MongoDB</h1>
-      <p class="text-lg text-gray-600 mt-2">Duración: <strong>3 horas</strong> • Nivel: <strong>Básico</strong></p>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🧩 Módulo 5 — Agregaciones y pipeline</h1>
+      <p class="text-lg text-gray-600 mt-2">Duración: <strong>2 horas</strong> • Nivel: <strong>Básico</strong></p>
 
       <div class="mt-4 flex items-center justify-center gap-3">
         <button id="openIndex" class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
-      </div>
-    </section>
-
-    <!-- Summary -->
-    <section class="card p-6 mb-6 flex items-center justify-between gap-6">
-      <div>
-        <div class="text-sm text-gray-500">Objetivos</div>
-        <h2 class="text-xl font-semibold text-slate-900">Aprender operadores avanzados y consultas complejas en MongoDB</h2>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="text-sm text-gray-500">Progreso módulo</div>
-        <div id="progressLabel" class="text-teal-700 font-semibold">0% completado</div>
       </div>
     </section>
 
@@ -108,286 +95,205 @@
     <section class="card p-6 mb-6">
       <h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
       <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
-        <li>Dominar operadores de comparación, lógicos y de array.</li>
-        <li>Usar operadores de proyección avanzada.</li>
-        <li>Construir consultas con <code class="inline">$elemMatch</code>, <code class="inline">$in</code>, <code class="inline">$regex</code>.</li>
-        <li>Combinar filtros complejos y paginación eficiente.</li>
-        <li>Aplicar buenas prácticas en consultas avanzadas para producción.</li>
+        <li>Construir consultas complejas y transformaciones de datos.</li>
+        <li>Aprender a usar agregaciones con pipelines.</li>
+        <li>Aplicar operadores avanzados para análisis estadístico y agrupaciones.</li>
+        <li>Dominar etapas: $match, $group, $project, $sort, $lookup, $unwind, $bucket.</li>
+        <li>Crear pipelines que integren múltiples etapas para análisis de datos real.</li>
       </ul>
     </section>
 
-    <!-- 1. Operadores de comparación -->
+    <!-- 1. Qué es agregación -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">1. Operadores de comparación</h4>
-
-      <details class="mb-4" open>
-        <summary>Concepto y ejemplos</summary>
-        <div class="content">
-          <p class="small mb-2">Se usan para filtrar documentos según valores numéricos, cadenas o fechas.</p>
-
-          <div class="space-y-4">
-            <div>
-              <strong>$eq / $ne — Igual / Distinto</strong>
-              <pre class="code">db.productos.find({ precio: { $eq: 35000 } })
-db.productos.find({ precio: { $ne: 35000 } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ precio: { $eq: 35000 } }); db.productos.find({ precio: { $ne: 35000 } });'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$gt / $gte — Mayor que / Mayor o igual</strong>
-              <pre class="code">db.productos.find({ precio: { $gt: 20000 } })
-db.productos.find({ precio: { $gte: 35000 } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ precio: { $gt: 20000 } }); db.productos.find({ precio: { $gte: 35000 } });'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$lt / $lte — Menor que / Menor o igual</strong>
-              <pre class="code">db.productos.find({ stock: { $lt: 10 } })
-db.productos.find({ stock: { $lte: 12 } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ stock: { $lt: 10 } }); db.productos.find({ stock: { $lte: 12 } });'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$in / $nin — Contiene / No contiene</strong>
-              <pre class="code">db.productos.find({ categorias: { $in: ["oferta", "nuevo"] } })
-db.productos.find({ categorias: { $nin: ["oferta"] } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ categorias: { $in: ["oferta", "nuevo"] } }); db.productos.find({ categorias: { $nin: ["oferta"] } });'>Copiar</button>
-            </div>
-          </div>
-        </div>
-      </details>
+      <h4 class="text-xl font-semibold mb-3">1️⃣ ¿Qué es una agregación?</h4>
+      <p class="small mb-2">Las agregaciones permiten procesar documentos y devolver resultados computados, similares a GROUP BY, SUM(), AVG(), COUNT() en SQL.</p>
+      <p class="small mb-2">Mientras las consultas <code class="inline">find()</code> devuelven documentos filtrados, las agregaciones transforman, agrupan y combinan datos.</p>
+      <pre class="code">db.coleccion.aggregate(pipeline)  // pipeline: arreglo de etapas</pre>
     </section>
 
-    <!-- 2. Operadores lógicos -->
+    <!-- 2. Estructura del Pipeline -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">2. Operadores lógicos</h4>
-
-      <details class="mb-4" open>
-        <summary>Combinar condiciones</summary>
-        <div class="content">
-          <div class="space-y-4">
-            <div>
-              <strong>$and — Todas las condiciones</strong>
-              <pre class="code">db.productos.find({ $and: [ { precio: { $gt: 20000 } }, { stock: { $gte: 5 } } ] })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ $and: [ { precio: { $gt: 20000 } }, { stock: { $gte: 5 } } ] })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$or — Alguna condición</strong>
-              <pre class="code">db.productos.find({ $or: [ { stock: { $lt: 5 } }, { precio: { $gt: 50000 } } ] })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ $or: [ { stock: { $lt: 5 } }, { precio: { $gt: 50000 } } ] })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$not — Negación</strong>
-              <pre class="code">db.productos.find({ precio: { $not: { $gt: 50000 } } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ precio: { $not: { $gt: 50000 } } })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$nor — Ninguna condición</strong>
-              <pre class="code">db.productos.find({ $nor: [ { stock: { $lt: 5 } }, { precio: { $gt: 50000 } } ] })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ $nor: [ { stock: { $lt: 5 } }, { precio: { $gt: 50000 } } ] })'>Copiar</button>
-            </div>
-          </div>
-        </div>
-      </details>
+      <h4 class="text-xl font-semibold mb-3">2️⃣ Estructura del Pipeline</h4>
+      <pre class="code">db.pedidos.aggregate([
+  { $match: { estado: "entregado" } },
+  { $group: { _id: "$cliente", totalCompras: { $sum: "$valor" } } },
+  { $sort: { totalCompras: -1 } }
+])</pre>
+      <ul class="list-disc pl-6 text-gray-700 mt-2">
+        <li><strong>$match:</strong> Filtra documentos (similar a WHERE)</li>
+        <li><strong>$group:</strong> Agrupa y aplica funciones de agregación</li>
+        <li><strong>$sort:</strong> Ordena resultados</li>
+        <li><strong>$project:</strong> Selecciona o transforma campos</li>
+        <li><strong>$limit:</strong> Limita resultados</li>
+        <li><strong>$skip:</strong> Omite documentos</li>
+        <li><strong>$lookup:</strong> Une colecciones</li>
+        <li><strong>$unwind:</strong> Descompone arreglos</li>
+        <li><strong>$count:</strong> Cuenta documentos</li>
+        <li><strong>$addFields:</strong> Agrega campos calculados</li>
+      </ul>
     </section>
 
-    <!-- 3. Consultas sobre arrays -->
+    <!-- 3. Operadores comunes -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">3. Consultas sobre arrays</h4>
-
-      <details class="mb-4" open>
-        <summary>$elemMatch y operadores de array</summary>
-        <div class="content">
-          <div class="space-y-4">
-            <div>
-              <strong>$elemMatch — Coincidencia específica</strong>
-              <pre class="code">db.productos.find({ categorias: { $elemMatch: { $eq: "oferta" } } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ categorias: { $elemMatch: { $eq: "oferta" } } })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$size — Tamaño del array</strong>
-              <pre class="code">db.productos.find({ categorias: { $size: 2 } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ categorias: { $size: 2 } })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>$all — Todos los elementos</strong>
-              <pre class="code">db.productos.find({ categorias: { $all: ["ropa","nuevo"] } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ categorias: { $all: ["ropa","nuevo"] } })'>Copiar</button>
-            </div>
-          </div>
-        </div>
-      </details>
+      <h4 class="text-xl font-semibold mb-3">3️⃣ Operadores de agregación comunes</h4>
+      <pre class="code">{
+  $sum: "$monto",
+  $avg: "$precio",
+  $max: "$edad",
+  $min: "$edad",
+  $count: "total",
+  $push: "$nombre"
+}</pre>
     </section>
 
-    <!-- 4. Regex y proyecciones -->
+    <!-- 4. Ejemplo práctico 1 -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">4. Búsquedas por patrones y proyecciones avanzadas</h4>
-
-      <details class="mb-4" open>
-        <summary>$regex y proyección condicional</summary>
-        <div class="content">
-          <div class="space-y-4">
-            <div>
-              <strong>Búsqueda por patrón</strong>
-              <pre class="code">db.productos.find({ nombre: { $regex: "^Cami", $options: "i" } })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({ nombre: { $regex: "^Cami", $options: "i" } })'>Copiar</button>
-            </div>
-
-            <div>
-              <strong>Proyección condicional</strong>
-              <pre class="code">db.productos.find({}, { nombre: 1, categorias: 1, _id: 0 })</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.find({}, { nombre: 1, categorias: 1, _id: 0 })'>Copiar</button>
-            </div>
-          </div>
-        </div>
-      </details>
+      <h4 class="text-xl font-semibold mb-3">4️⃣ Total de ventas por cliente</h4>
+      <pre class="code">db.ventas.insertMany([
+  { cliente: "Ana", valor: 120, ciudad: "Bogotá" },
+  { cliente: "Ana", valor: 80, ciudad: "Bogotá" },
+  { cliente: "Luis", valor: 200, ciudad: "Medellín" },
+  { cliente: "Sofía", valor: 150, ciudad: "Cali" }
+])</pre>
+      <pre class="code">db.ventas.aggregate([
+  { $group: { _id: "$cliente", totalVentas: { $sum: "$valor" } } },
+  { $sort: { totalVentas: -1 } }
+])</pre>
     </section>
 
-    <!-- 5. Ejercicios guiados -->
+    <!-- 5. Ejemplo práctico 2 -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">5. Ejercicios guiados</h4>
-
-      <details class="mb-3">
-        <summary>Ejercicio 1 — Filtrar productos caros y en oferta</summary>
-        <div class="content">
-          <p class="small">Encuentra productos con precio &gt; 30000 y que tengan "oferta" en categorías.</p>
-          <pre class="code">db.productos.find({ $and: [ { precio: { $gt: 30000 } }, { categorias: { $in: ["oferta"] } } ] })</pre>
-          <button class="btn btn-ghost" data-copy='db.productos.find({ $and: [ { precio: { $gt: 30000 } }, { categorias: { $in: ["oferta"] } } ] })'>Copiar</button>
-        </div>
-      </details>
-
-      <details class="mb-3">
-        <summary>Ejercicio 2 — Productos sin stock o muy caros</summary>
-        <div class="content">
-          <p class="small">Usa $or para filtrar stock ≤ 0 o precio ≥ 80000.</p>
-          <pre class="code">db.productos.find({ $or: [ { stock: { $lte: 0 } }, { precio: { $gte: 80000 } } ] })</pre>
-          <button class="btn btn-ghost" data-copy='db.productos.find({ $or: [ { stock: { $lte: 0 } }, { precio: { $gte: 80000 } } ] })'>Copiar</button>
-        </div>
-      </details>
-
-      <details class="mb-3">
-        <summary>Ejercicio 3 — Buscar por nombre con regex</summary>
-        <div class="content">
-          <p class="small">Encuentra productos cuyo nombre comience con "Z" (mayúscula o minúscula).</p>
-          <pre class="code">db.productos.find({ nombre: { $regex: "^Z", $options: "i" } })</pre>
-          <button class="btn btn-ghost" data-copy='db.productos.find({ nombre: { $regex: "^Z", $options: "i" } })'>Copiar</button>
-        </div>
-      </details>
+      <h4 class="text-xl font-semibold mb-3">5️⃣ Promedio de ventas por ciudad</h4>
+      <pre class="code">db.ventas.aggregate([
+  { $group: { _id: "$ciudad", promedioVentas: { $avg: "$valor" } } }
+])</pre>
     </section>
 
-    <!-- Sección de preguntas de repaso y quizz -->
-  <section class="card p-6 mb-6">
-    <h4 class="text-xl font-semibold mb-3">📝 Preguntas de repaso</h4>
-    <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
-      <li>¿Qué operador usarías para filtrar productos con precio mayor a 50000?</li>
-      <li>¿Cómo combinarías condiciones que deben cumplirse todas a la vez?</li>
-      <li>¿Cuál es la diferencia entre <code class="inline">$in</code> y <code class="inline">$all</code>?</li>
-      <li>¿Qué operador permite buscar documentos donde un array tenga un elemento específico?</li>
-      <li>¿Cómo proyectar solo algunos campos de un documento sin incluir el <code class="inline">_id</code>?</li>
-    </ul>
-  </section>
-
-  <!-- Sección de mini-quizz interactivo -->
-  <section class="card p-6 mb-6">
-    <h4 class="text-xl font-semibold mb-3">🎯 Mini-Quizz interactivo</h4>
-    <div class="space-y-4">
-      <div>
-        <p class="small mb-2">1️⃣ ¿Cuál operador devuelve documentos donde el precio no es igual a 35000?</p>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,true)">$ne</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$eq</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$gt</button>
-      </div>
-
-      <div>
-        <p class="small mb-2">2️⃣ Quieres todos los documentos cuyo stock sea menor a 5 o precio mayor a 50000. ¿Qué operador lógico usarías?</p>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,true)">$or</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$and</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$not</button>
-      </div>
-
-      <div>
-        <p class="small mb-2">3️⃣ Necesitas filtrar productos con categorías "ropa" y "nuevo" al mismo tiempo. ¿Qué operador usarías?</p>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,true)">$all</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$in</button>
-        <button class="btn btn-ghost" onclick="checkAnswer(this,false)">$elemMatch</button>
-      </div>
-    </div>
-    <div id="quizzResult" class="mt-4 font-semibold text-lg"></div>
-  </section>
-
-  <!-- Cheatsheet / Resumen visual -->
-  <section class="card p-6 mb-6">
-    <h4 class="text-xl font-semibold mb-3">📌 Cheatsheet: operadores MongoDB</h4>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-      <div>
-        <strong>Comparación:</strong>
-        <ul class="list-disc pl-6">
-          <li><code class="inline">$eq</code> = igual</li>
-          <li><code class="inline">$ne</code> ≠ distinto</li>
-          <li><code class="inline">$gt</code> > mayor que</li>
-          <li><code class="inline">$gte</code> ≥ mayor o igual</li>
-          <li><code class="inline">$lt</code> < menor que</li>
-          <li><code class="inline">$lte</code> ≤ menor o igual</li>
-          <li><code class="inline">$in</code> contiene</li>
-          <li><code class="inline">$nin</code> no contiene</li>
-        </ul>
-      </div>
-      <div>
-        <strong>Lógicos y arrays:</strong>
-        <ul class="list-disc pl-6">
-          <li><code class="inline">$and</code> todas las condiciones</li>
-          <li><code class="inline">$or</code> alguna condición</li>
-          <li><code class="inline">$not</code> negación</li>
-          <li><code class="inline">$nor</code> ninguna condición</li>
-          <li><code class="inline">$elemMatch</code> coincidencia en array</li>
-          <li><code class="inline">$size</code> tamaño de array</li>
-          <li><code class="inline">$all</code> todos los elementos</li>
-          <li><code class="inline">$regex</code> búsqueda por patrón</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <script>
-  function checkAnswer(button, isCorrect){
-    const result = document.getElementById('quizzResult');
-    if(isCorrect){
-      result.innerHTML = '✅ Correcto!';
-      button.classList.add('bg-green-500','text-white');
-    } else {
-      result.innerHTML = '❌ Intenta de nuevo';
-      button.classList.add('bg-red-500','text-white');
+    <!-- 6. $lookup -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">6️⃣ Uso de $lookup (equivalente a JOIN)</h4>
+      <pre class="code">db.clientes.aggregate([
+  {
+    $lookup: {
+      from: "pedidos",
+      localField: "_id",
+      foreignField: "cliente_id",
+      as: "pedidos"
     }
-    setTimeout(()=>result.innerHTML='',1500);
   }
-  </script>
-
-
-    <!-- Reflexión -->
-    <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
-      <ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
-        <li>Los operadores avanzados permiten filtrar con precisión grandes colecciones.</li>
-        <li>Combina operadores lógicos y de array para consultas complejas.</li>
-        <li>Regex y proyecciones ayudan a optimizar la cantidad de datos transferidos.</li>
-      </ul>
-
-      <div class="mt-4 p-4 bg-teal-50 rounded-lg border-l-4 border-teal-400">
-        <strong>✅ Resultado esperado:</strong>
-        <ul class="list-disc pl-6 mt-2 text-gray-700">
-          <li>Saber usar operadores de comparación, lógicos y de array.</li>
-          <li>Construir consultas avanzadas eficientes y seguras.</li>
-          <li>Haber completado los ejercicios guiados en tu cluster/Compass.</li>
-        </ul>
-      </div>
+])</pre>
     </section>
 
-    <!-- bottom actions -->
+    <!-- 7. $unwind -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">7️⃣ $unwind — Descomponer arreglos</h4>
+      <pre class="code">db.clientes.aggregate([
+  { $unwind: "$pedidos" },
+  { $project: { nombre: 1, "pedidos.producto": 1 } }
+])</pre>
+    </section>
+
+    <!-- 8. Combinación de etapas -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">8️⃣ Combinación de etapas</h4>
+      <pre class="code">db.ventas.aggregate([
+  { $match: { ciudad: "Bogotá" } },
+  { $group: { _id: "$cliente", total: { $sum: "$valor" } } },
+  { $sort: { total: -1 } },
+  { $limit: 5 }
+])</pre>
+    </section>
+
+    <!-- 9. $project y expresiones -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">9️⃣ $project — Seleccionar y transformar campos</h4>
+      <pre class="code">db.ventas.aggregate([
+  { $project: { _id:0, cliente:1, ciudad:1, totalConIVA: { $multiply: ["$valor",1.19] } } }
+])</pre>
+    </section>
+
+    <!-- 10. Expresiones avanzadas -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">🔟 Expresiones avanzadas</h4>
+      <pre class="code">{
+  $cond, $ifNull, $concat, $substr, $toUpper
+}</pre>
+      <pre class="code">db.usuarios.aggregate([
+  {
+    $project: {
+      nombreCompleto: { $concat: [ "$nombre", " ", "$apellido" ] },
+      tipo: { $cond: { if: { $gte: ["$edad",18] }, then: "Adulto", else: "Menor" } }
+    }
+  }
+])</pre>
+    </section>
+
+    <!-- 11. $bucket -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">11️⃣ $bucket y $bucketAuto — Agrupar por rangos</h4>
+      <pre class="code">db.productos.aggregate([
+  {
+    $bucket: {
+      groupBy: "$precio",
+      boundaries: [0,100,500,1000],
+      default: "Otros",
+      output: { cantidad: { $sum:1 } }
+    }
+  }
+])</pre>
+    </section>
+
+    <!-- 12. $count, $limit y $skip -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">12️⃣ $count, $limit y $skip</h4>
+      <pre class="code">db.usuarios.aggregate([
+  { $match: { ciudad: "Bogotá" } },
+  { $count: "usuariosBogota" }
+])</pre>
+    </section>
+
+    <!-- 13. Ejercicio integrador -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">13️⃣ Ejercicio integrador: análisis de ventas</h4>
+      <pre class="code">db.ventas.aggregate([
+  // Total de ventas por cliente
+])
+db.ventas.aggregate([
+  // Promedio por ciudad
+])
+db.ventas.aggregate([
+  // 2 clientes con mayor total
+])</pre>
+    </section>
+
+    <!-- 14. Resumen -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">14️⃣ Resumen del módulo</h4>
+      <pre class="code">Concepto             Descripción
+$aggregate()          Ejecuta un pipeline de etapas
+$match                Filtra documentos
+$group                Agrupa
+$lookup               Une colecciones
+$unwind               Descompone arreglos
+$project              Selecciona o crea nuevos campos
+$bucket               Agrupa por rangos
+$count, $limit, $skip Control de resultados
+</pre>
+</section>
+
+<!-- 15. Actividad práctica final -->
+<section class="card p-6 mb-6">
+  <h4 class="text-xl font-semibold mb-3">15️⃣ Actividad práctica final</h4>
+  <p class="text-gray-700 mb-3">Crea un pipeline que:</p>
+  <ul class="list-disc pl-6 space-y-2 text-gray-700">
+    <li>Filtre las ventas con <code class="inline">valor > 100</code>.</li>
+    <li>Agrupe por ciudad y sume los valores.</li>
+    <li>Agregue un campo <code class="inline">impuesto = valorTotal × 0.19</code>.</li>
+    <li>Ordene de mayor a menor según el valor total.</li>
+  </ul>
+  <p class="small mt-2">💡 Guarda tu pipeline y pruébalo en MongoDB Atlas usando el <strong>Aggregation Pipeline Builder</strong>.</p>
+</section>
+
 <!-- Footer / Navegación -->
 <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
   <div class="flex gap-3">
@@ -400,60 +306,17 @@ db.productos.find({ categorias: { $nin: ["oferta"] } })</pre>
     Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
 </footer>
 
-   
-  </main>
 
-  <!-- SCRIPTS -->
-  <script>
-    function showToast(msg){
-      const b = document.createElement('div');
-      b.innerText = msg;
-      Object.assign(b.style,{position:'fixed',right:'18px',bottom:'18px',background:'linear-gradient(90deg,#0ea5a4,#0369a1)',color:'white',padding:'10px 14px',borderRadius:'10px',boxShadow:'0 10px 30px rgba(0,0,0,0.18)',zIndex:9999});
-      document.body.appendChild(b);
-      setTimeout(()=>b.remove(),1400);
-    }
+<script>
+  // Marcar módulo como completado
+  const markBtn = document.getElementById('markDoneTop');
+  markBtn.addEventListener('click', () => {
+    const pressed = markBtn.getAttribute('aria-pressed') === 'true';
+    markBtn.setAttribute('aria-pressed', (!pressed).toString());
+    markBtn.textContent = !pressed ? 'Completado ✅' : 'Marcar completado ✅';
+    markBtn.classList.toggle('btn-primary');
+  });
+</script>
 
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('button[data-copy]');
-      if(!btn) return;
-      const text = btn.getAttribute('data-copy');
-      if(!text) return;
-      navigator.clipboard?.writeText(text).then(()=> showToast('Copiado al portapapeles ✓')).catch(()=> {
-        const ta = document.createElement('textarea');
-        ta.value = text; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); showToast('Copiado al portapapeles ✓'); } catch(e){ alert('No se pudo copiar'); }
-        ta.remove();
-      });
-    });
-
-    document.querySelectorAll('details').forEach(d=>{
-      const s = d.querySelector('summary');
-      s.addEventListener('keydown', (ev)=> { if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); d.open=!d.open; } });
-    });
-
-    function setCompleted(val){
-      try {
-        localStorage.setItem('mod4_completed', val ? '1' : '0');
-        updateProgress();
-        showToast(val ? 'Módulo 4 marcado como completado ✅' : 'Módulo 4 marcado como no completado');
-      } catch(e){ console.error(e); }
-    }
-    document.getElementById('markDoneTop').addEventListener('click', ()=> setCompleted(true));
-    document.getElementById('markDoneBottom').addEventListener('click', ()=> setCompleted(true));
-
-    function updateProgress(){
-      const done = localStorage.getItem('mod4_completed') === '1';
-      document.getElementById('progressLabel').innerText = done ? '100% completado' : '0% completado';
-      document.querySelectorAll('#markDoneTop, #markDoneBottom').forEach(b => b.setAttribute('aria-pressed', done ? 'true' : 'false'));
-    }
-    updateProgress();
-
-    window.addEventListener('keydown', (e)=> { if(e.key.toLowerCase()==='m') setCompleted(true); });
-    document.querySelectorAll('pre.code').forEach(p=>p.setAttribute('tabindex','0'));
-  </script>
-
-  <script>
-    localStorage.setItem("modulo4_estado", "completed");
-  </script>
 </body>
 </html>

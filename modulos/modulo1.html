@@ -1,214 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>🌱 MÓDULO 1 — Introducción a MongoDB y JSON</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
-  :root{
-    --brand-1: #0ea5a4;
-    --brand-2: #0369a1;
-    --muted: #374151;
-    --bg-warm: #f5f9fb;
-    --code-bg: #0b1220;
-    --highlight: #fde68a;
-  }
-  html { font-size: 18px; }
-  body {
-    background: linear-gradient(135deg, #f0f4f8 0%, #dfe9f3 100%);
-    color: #0f172a;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    line-height: 1.6;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  .card { background: white; border-radius:14px; box-shadow: 0 10px 30px rgba(2,6,23,0.06); padding:1.5rem; margin-bottom:1.5rem; }
-  pre.code { background: var(--code-bg); color: #e6f3f1; padding: 1rem; border-radius: 10px; overflow:auto; font-family: ui-monospace, monospace; font-size: 0.95rem; }
-  code.inline { background: var(--highlight); padding: 0.12rem 0.45rem; border-radius:6px; font-family: ui-monospace, monospace; cursor: help; }
-  .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .9rem; border-radius:10px; font-weight:600; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
-  .btn:active{ transform: translateY(1px); }
-  .btn-primary{ background: linear-gradient(90deg,var(--brand-1),var(--brand-2)); color:white; box-shadow:0 8px 20px rgba(3,105,161,0.12); }
-  .btn-ghost{ background:white; border:1px solid rgba(3,105,161,0.08); color:var(--brand-2); }
-  .tooltip { position: relative; display: inline-block; }
-  .tooltip .tooltiptext { visibility: hidden; width: 200px; background-color: #0f172a; color: #fff; text-align: center; padding: 5px; border-radius: 6px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -100px; opacity: 0; transition: opacity 0.3s; font-size: 0.85rem; }
-  .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
-  .quiz { border-left: 4px solid #f43f5e; padding-left: 1rem; margin-top: 1rem; background: #fff1f2; border-radius: 8px; }
-  .quiz button { margin-top: 0.5rem; }
-  .section-completed { border-left: 4px solid #16a34a; }
+:root{
+  --brand-1:#0ea5a4;
+  --brand-2:#0369a1;
+  --muted:#374151;
+  --bg-warm:#f5f9fb;
+  --code-bg:#0b1220;
+}
+body{
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height:1.6;
+  background: var(--bg-warm);
+  color:#0f172a;
+}
+.card{background:white;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
+pre.code{
+  background: var(--code-bg);
+  color: #e6f3f1;
+  padding:1rem;
+  border-radius:10px;
+  overflow:auto;
+  font-family: ui-monospace, monospace;
+}
+code.inline{
+  background: rgba(3,105,161,0.06);
+  padding:0.12rem 0.45rem;
+  border-radius:6px;
+  font-family: ui-monospace, monospace;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.5rem .9rem;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:active{transform: translateY(1px);}
+.btn-primary{background:linear-gradient(90deg,var(--brand-1),var(--brand-2));color:white;box-shadow:0 8px 20px rgba(3,105,161,0.12);}
+.btn-ghost{background:white;border:1px solid rgba(3,105,161,0.08);color:var(--brand-2);}
 </style>
 </head>
-<body class="px-6 py-12 max-w-5xl mx-auto">
 
+<body>
+
+<!-- NAV -->
 <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100">
-  <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-    <a href="../index.html" class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:linear-gradient(180deg,var(--brand-1),var(--brand-2));">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 6 7 11C7 15 11 20 12 22C13 20 17 15 17 11C17 6 12 2 12 2Z" fill="white"/></svg>
-      </div>
-      <span class="font-semibold text-lg text-slate-800">Curso MongoDB</span>
-    </a>
-    <div class="flex items-center gap-3 text-sm font-medium">
-      <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 1</a>
-      <a href="../modulos/modulo2.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 2</a>
-      <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
-      <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
-      <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
-      <a href="../modulos/modulo6.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 6</a>
-      <a href="../modulos/modulo7.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 7</a>
+<nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+  <a href="../index.html" class="flex items-center gap-2">
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:linear-gradient(180deg,var(--brand-1),var(--brand-2));">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 6 7 11C7 15 11 20 12 22C13 20 17 15 17 11C17 6 12 2 12 2Z" fill="white"/></svg>
     </div>
-  </nav>
-    </header>
+    <span class="font-semibold text-lg text-slate-800">Curso MongoDB</span>
+  </a>
+  <div class="flex items-center gap-3 text-sm font-medium">
+    <a href="../modulos/modulo0.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 0</a>
+    <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 1</a>
+    <a href="../modulos/modulo2.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 2</a>
+    <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
+    <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
+    <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
+  </div>
+</nav>
+</header>
 
-<main>
+<main class="max-w-6xl mx-auto px-6 py-10">
 
-<section class="module-header">
-  <h1 class="text-4xl font-extrabold text-gray-800 mb-2">🌱 MÓDULO 1 — Introducción a MongoDB y JSON</h1>
-  <p class="text-gray-600 text-lg">Duración: 3 horas • Nivel: Básico</p>
-  <div class="mt-4 flex justify-center">
-    <button class="btn btn-ghost" onclick="location.href='../index.html'">← Volver al índice</button>
+<!-- Header -->
+<section class="mb-8 text-center">
+  <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🌱 Módulo 1 — Introducción a MongoDB y JSON</h1>
+  <p class="text-lg text-gray-600 mt-2">Duración: <strong>2 horas</strong> • Nivel: <strong>Básico</strong></p>
+  <div class="mt-4 flex items-center justify-center gap-3">
+    <button class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
   </div>
 </section>
 
-<!-- OBJETIVOS -->
-<div class="card">
-  <h2>🎯 Objetivos generales</h2>
-  <ul class="list-disc pl-5">
-    <li>Comprender qué es <span class="tooltip">MongoDB<span class="tooltiptext">Base de datos NoSQL orientada a documentos</span></span> y <span class="tooltip">JSON/BSON<span class="tooltiptext">Formato de datos de MongoDB</span></span>.</li>
-    <li>Crear tu primera base y colección en MongoDB Atlas o local.</li>
-  </ul>
-  <h2>📌 Objetivos específicos</h2>
-  <ul class="list-disc pl-5">
-    <li>Diferenciar bases NoSQL de bases relacionales.</li>
-    <li>Conocer JSON y BSON como base del modelo documental.</li>
-    <li>Instalar MongoDB o usar Atlas y crear una base inicial.</li>
-  </ul>
-</div>
+<!-- Objetivos -->
+<section class="card p-6 mb-6">
+<h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
+<ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
+<li>Comprender qué es MongoDB y JSON/BSON.</li>
+<li>Crear tu primera base y colección en MongoDB Atlas o local.</li>
+<li>Diferenciar bases NoSQL de bases relacionales.</li>
+<li>Conocer los tipos especiales de BSON y el campo <code class="inline">_id</code>.</li>
+<li>Instalar MongoDB o usar Atlas y practicar consultas básicas.</li>
+</ul>
+</section>
 
-<!-- SECCIÓN 1 -->
-<div class="card section">
-  <h2>1️⃣ ¿Qué es una base de datos NoSQL? 💡</h2>
-  <p>NoSQL significa “Not Only SQL” y agrupa sistemas que no usan tablas tradicionales, permitiendo almacenar datos de manera flexible.</p>
-  <ul class="list-disc pl-5">
-    <li><strong>Clave-valor:</strong> Redis — cachés y sesiones.</li>
-    <li><strong>Columnares:</strong> Cassandra — analítica.</li>
-    <li><strong>Grafos:</strong> Neo4j — relaciones complejas.</li>
-    <li><strong>Documentales:</strong> MongoDB — aplicaciones web/móviles.</li>
-  </ul>
-  <pre class="code">
+<!-- 1. NoSQL -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">1️⃣ ¿Qué es una base de datos NoSQL?</h4>
+<p class="text-gray-700 mb-2">NoSQL significa “Not Only SQL” y agrupa sistemas que no usan tablas tradicionales, permitiendo almacenar datos de manera flexible.</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li><strong>Clave-valor:</strong> Redis — cachés y sesiones.</li>
+<li><strong>Columnares:</strong> Cassandra — analítica.</li>
+<li><strong>Grafos:</strong> Neo4j — relaciones complejas.</li>
+<li><strong>Documentales:</strong> MongoDB — aplicaciones web/móviles.</li>
+</ul>
+<pre class="code">
 miBaseDeDatos
  └── usuarios
        ├── { nombre: "Ana", edad: 25 }
        ├── { nombre: "Luis", edad: 30 }
-  </pre>
+</pre>
+</section>
 
-  <!-- Mini quiz -->
-  <div class="quiz">
-    <p><strong>Pregunta:</strong> MongoDB es un sistema:</p>
-    <button onclick="checkQuiz(this,true)">NoSQL orientado a documentos ✅</button>
-    <button onclick="checkQuiz(this,false)">SQL relacional ❌</button>
-  </div>
-</div>
+<!-- 2. Arquitectura -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">2️⃣ MongoDB: arquitectura, ventajas y casos de uso</h4>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Flexibilidad de esquemas</li>
+<li>Escalabilidad horizontal</li>
+<li>Lecturas rápidas (menos joins)</li>
+<li>Integración natural con JSON</li>
+</ul>
+<p class="text-gray-700 mt-2">Casos de uso:</p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>E-commerce</li>
+<li>Redes sociales</li>
+<li>Análisis en tiempo real</li>
+<li>Datos semi-estructurados</li>
+</ul>
+</section>
 
-<!-- SECCIÓN 2 -->
-<div class="card section">
-  <h2>2️⃣ MongoDB: arquitectura, ventajas y casos de uso ⚙️</h2>
-  <ul class="list-disc pl-5">
-    <li>Flexibilidad de esquemas</li>
-    <li>Escalabilidad horizontal</li>
-    <li>Lecturas rápidas (menos joins)</li>
-    <li>Integración natural con JSON</li>
-  </ul>
-  <ul class="list-disc pl-5 mt-2">
-    <li>E-commerce</li>
-    <li>Redes sociales</li>
-    <li>Análisis en tiempo real</li>
-    <li>Datos semi-estructurados</li>
-  </ul>
-
-  <div class="quiz">
-    <p><strong>Pregunta:</strong> ¿MongoDB requiere un esquema fijo?</p>
-    <button onclick="checkQuiz(this,false)">Sí ❌</button>
-    <button onclick="checkQuiz(this,true)">No ✅</button>
-  </div>
-</div>
-
-<!-- SECCIÓN 3 -->
-<div class="card section">
-  <h2>3️⃣ JSON y BSON — el corazón de MongoDB</h2>
-  <p><strong>JSON:</strong> formato de texto ligero, legible, con pares clave-valor y estructuras anidadas.</p>
-  <pre class="code">
+<!-- 3. JSON y BSON -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">3️⃣ JSON y BSON — el corazón de MongoDB</h4>
+<p class="text-gray-700 mb-2"><strong>JSON:</strong> formato de texto ligero, legible, con pares clave-valor y estructuras anidadas.</p>
+<pre class="code">
 { 
   "nombre": "María",
   "edad": 28,
   "correo": "maria@email.com",
   "intereses": ["viajar", "lectura"]
 }
-  </pre>
-  <p><strong>BSON:</strong> versión binaria de JSON usada internamente por MongoDB, con tipos adicionales.</p>
-  <pre class="code">
+</pre>
+<p class="text-gray-700 mb-2"><strong>BSON:</strong> versión binaria de JSON usada internamente por MongoDB, con tipos adicionales.</p>
+<pre class="code">
 { 
   "_id": ObjectId("653f2a8c3b1d4f9b5c3e4e9f"),
   "nombre": "María",
   "edad": 28
 }
-  </pre>
-  <p>Tipos especiales en BSON: <code class="inline">ObjectId</code>, <code class="inline">Date</code>, <code class="inline">Binary</code>, etc.</p>
+</pre>
+<p class="text-gray-700">Tipos especiales: <code class="inline">ObjectId</code>, <code class="inline">Date</code>, <code class="inline">Binary</code>, etc.</p>
+</section>
 
-  <div class="quiz">
-    <p><strong>Pregunta:</strong> BSON es:</p>
-    <button onclick="checkQuiz(this,true)">Versión binaria de JSON ✅</button>
-    <button onclick="checkQuiz(this,false)">Otro formato de texto ❌</button>
-  </div>
-</div>
-
-<!-- SECCIÓN 4 -->
-<div class="card section">
-  <h2>4️⃣ El campo <code>_id</code> (ObjectId)</h2>
-  <p>Cada documento tiene un campo <code class="inline">_id</code> que actúa como identificador único.</p>
-  <pre class="code">
+<!-- 4. _id -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">4️⃣ El campo <code>_id</code> (ObjectId)</h4>
+<p class="text-gray-700 mb-2">Cada documento tiene un campo <code class="inline">_id</code> que actúa como identificador único.</p>
+<pre class="code">
 ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 - 4 bytes: timestamp
 - 5 bytes: identificador de máquina
 - 3 bytes: contador aleatorio
-  </pre>
+</pre>
+</section>
 
-  <div class="quiz">
-    <p><strong>Pregunta:</strong> ¿_id puede repetirse entre documentos?</p>
-    <button onclick="checkQuiz(this,false)">Sí ❌</button>
-    <button onclick="checkQuiz(this,true)">No ✅</button>
-  </div>
-</div>
+<!-- 5. Instalación y entorno -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">5️⃣ Instalación y entorno de trabajo</h4>
+<p class="text-gray-700 mb-2">🖥️ <strong>MongoDB local:</strong></p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Descarga Community Server en <a href="https://www.mongodb.com/try/download/community" target="_blank" class="text-blue-600 underline">mongodb.com</a></li>
+<li>Instala MongoDB Compass.</li>
+<li>Conecta a <code class="inline">mongodb://localhost:27017</code></li>
+</ul>
+<p class="text-gray-700 mb-2">☁️ <strong>MongoDB Atlas:</strong></p>
+<ul class="list-disc pl-5 text-gray-700">
+<li>Crea cuenta en Atlas.</li>
+<li>Cluster gratuito (M0 Sandbox).</li>
+<li>Configura usuario/contraseña y añade tu IP.</li>
+<li>Copia la cadena de conexión <code class="inline">mongodb+srv://usuario:password@cluster0.mongodb.net/</code></li>
+</ul>
+</section>
 
-<!-- SECCIÓN 5 -->
-<div class="card section">
-  <h2>5️⃣ Instalación y entorno de trabajo</h2>
-  <p>🖥️ <strong>MongoDB local:</strong></p>
-  <ul class="list-disc pl-5">
-    <li>Descarga Community Server en <a href="https://www.mongodb.com/try/download/community" target="_blank" class="text-blue-600 underline">mongodb.com</a></li>
-    <li>Instala MongoDB Compass.</li>
-    <li>Conecta a <code class="inline">mongodb://localhost:27017</code></li>
-  </ul>
-  <p>☁️ <strong>MongoDB Atlas:</strong></p>
-  <ul class="list-disc pl-5">
-    <li>Crea cuenta en Atlas.</li>
-    <li>Cluster gratuito (M0 Sandbox).</li>
-    <li>Configura usuario/contraseña y añade tu IP.</li>
-    <li>Copia la cadena de conexión <code class="inline">mongodb+srv://usuario:password@cluster0.mongodb.net/</code></li>
-  </ul>
-
-  <div class="quiz">
-    <p><strong>Pregunta:</strong> ¿Atlas permite trabajar sin instalar MongoDB local?</p>
-    <button onclick="checkQuiz(this,true)">Sí ✅</button>
-    <button onclick="checkQuiz(this,false)">No ❌</button>
-  </div>
-</div>
-
-<!-- SECCIÓN 6 -->
-<div class="card section">
-  <h2>6️⃣ Ejemplo práctico: crear tu primera base y colección</h2>
-  <pre class="code">
+<!-- 6. Ejemplo práctico -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">6️⃣ Ejemplo práctico: crear tu primera base y colección</h4>
+<pre class="code">
 // Documento ejemplo: Camiseta Azul
 { 
   "nombre": "Camiseta Azul",
@@ -224,19 +204,14 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
   "tallas": ["S","M","L"],
   "color": "Negro"
 }
-  </pre>
-</div>
+</pre>
+</section>
 
-<!-- SECCIÓN 7 -->
-<div class="card exercise section">
-  <h2>7️⃣ Ejercicio práctico guiado (30 min)</h2>
-  <ol class="list-decimal pl-5">
-    <li>Ingresa a tu cuenta en MongoDB Atlas.</li>
-    <li>Crea una base llamada <code class="inline">biblioteca</code>.</li>
-    <li>Crea la colección <code class="inline">libros</code>.</li>
-    <li>Inserta los siguientes documentos:</li>
-  </ol>
-  <pre class="code">
+<!-- 7. Ejercicio -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">7️⃣ Ejercicio práctico guiado</h4>
+<p class="text-gray-700 mb-2">Crea la base <code class="inline">biblioteca</code> y colección <code class="inline">libros</code> en Atlas o Compass e inserta:</p>
+<pre class="code">
 { 
   "titulo": "Cien años de soledad",
   "autor": "Gabriel García Márquez",
@@ -249,63 +224,87 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
   "anio": 1943,
   "idiomas": ["Francés", "Español", "Inglés"]
 }
-  </pre>
-  <ol start="5" class="list-decimal pl-5">
-    <li>Ejecuta <code class="inline">db.libros.find()</code> y guarda una captura de pantalla.</li>
-    <li>Reflexiona sobre diferencias con una tabla SQL y ventajas del modelo documental.</li>
-  </ol>
+</pre>
+<p class="text-gray-700">Ejecuta <code class="inline">db.libros.find()</code> y observa los resultados.</p>
+</section>
+
+<!-- Quiz interactivo -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">📝 Quiz rápido — Módulo 1</h4>
+
+<div class="space-y-4">
+<div>
+<p class="font-semibold">1. MongoDB es un sistema:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q1" value="A"> SQL relacional</label>
+<label><input type="radio" name="q1" value="B"> NoSQL orientado a documentos</label>
+</div>
 </div>
 
-<!-- REFLEXIÓN FINAL -->
-<div class="card reflection">
-  <h2>🧠 Reflexión final</h2>
-  <ul class="list-disc pl-5">
-    <li>MongoDB usa colecciones y documentos en lugar de tablas y filas.</li>
-    <li>JSON es el modelo lógico; BSON es la representación binaria optimizada.</li>
-    <li>El campo <code class="inline">_id</code> es la primary key.</li>
-    <li>Se pueden crear documentos con estructuras distintas sin errores.</li>
-    <li>Atlas permite trabajar sin instalar nada localmente.</li>
-  </ul>
+<div>
+<p class="font-semibold">2. ¿MongoDB requiere un esquema fijo?</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q2" value="A"> Sí</label>
+<label><input type="radio" name="q2" value="B"> No</label>
+</div>
 </div>
 
-<!-- RESULTADO ESPERADO -->
-<div class="card result">
-  ✅ <strong>Resultado esperado:</strong>
-  <ul class="list-disc pl-5">
-    <li>Tener una cuenta activa en MongoDB Atlas.</li>
-    <li>Haber creado la base <code class="inline">biblioteca</code> y la colección <code class="inline">libros</code>.</li>
-    <li>Comprender los fundamentos de NoSQL, JSON y BSON.</li>
-  </ul>
+<div>
+<p class="font-semibold">3. BSON es:</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q3" value="A"> Versión binaria de JSON</label>
+<label><input type="radio" name="q3" value="B"> Otro formato de texto</label>
+</div>
 </div>
 
-<!-- FOOTER -->
-<div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-  <div class="flex gap-3">
-    <button class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
-  </div>
+<div>
+<p class="font-semibold">4. El campo <code>_id</code> puede repetirse entre documentos?</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q4" value="A"> Sí</label>
+<label><input type="radio" name="q4" value="B"> No</label>
 </div>
+</div>
+
+<div>
+<p class="font-semibold">5. Atlas permite trabajar sin instalar MongoDB local?</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q5" value="A"> Sí</label>
+<label><input type="radio" name="q5" value="B"> No</label>
+</div>
+</div>
+
+<button class="btn btn-primary mt-2" onclick="checkQuiz()">Verificar respuestas</button>
+<div id="quizResult" class="mt-2 font-semibold"></div>
+</div>
+</section>
+
+<!-- Reflexión final -->
+<section class="card p-6 mb-6">
+<h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
+<ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
+<li>MongoDB usa colecciones y documentos en lugar de tablas y filas.</li>
+<li>JSON es el modelo lógico; BSON es la representación binaria optimizada.</li>
+<li>El campo <code class="inline">_id</code> es la primary key.</li>
+<li>Se pueden crear documentos con estructuras distintas sin errores.</li>
+<li>Atlas permite trabajar sin instalar nada localmente.</li>
+</ul>
+</section>
 
 <footer class="mt-10 text-center text-sm text-gray-500">
   <p>📘 Guía de apoyo educativo — Versión 2025
     Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
 </footer>
+</main>
 
 <script>
-function checkQuiz(btn, correct){
-  if(correct){
-    showToast('✅ Correcto');
-    btn.parentElement.classList.add('section-completed');
-  } else {
-    showToast('❌ Intenta de nuevo');
+function checkQuiz(){
+  const answers = {q1:'B',q2:'B',q3:'A',q4:'B',q5:'A'};
+  let score = 0;
+  for(let i=1;i<=5;i++){
+    const val = document.querySelector('input[name="q'+i+'"]:checked')?.value;
+    if(val===answers['q'+i]) score++;
   }
-}
-
-function showToast(msg){
-  const b = document.createElement('div');
-  b.innerText = msg;
-  Object.assign(b.style,{position:'fixed',right:'18px',bottom:'18px',background:'linear-gradient(90deg,#0f766e,#065f46)',color:'white',padding:'10px 14px',borderRadius:'10px',boxShadow:'0 10px 30px rgba(2,6,23,0.2)',zIndex:9999});
-  document.body.appendChild(b);
-  setTimeout(()=>b.remove(),1600);
+  document.getElementById('quizResult').innerText = `Respuestas correctas: ${score}/5`;
 }
 </script>
 

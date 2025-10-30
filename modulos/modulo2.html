@@ -1,11 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🧩 MÓDULO 2 — De lo Relacional a lo Documental</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🧩 Módulo 2+3 — MongoDB: De lo Relacional a Tipos de Datos</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
 :root{
   --brand-1:#0ea5a4;
@@ -14,40 +13,25 @@
   --bg-warm:#f5f9fb;
   --code-bg:#0b1220;
 }
+html { font-size: 18px; scroll-behavior: smooth; }
 body{
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   line-height:1.6;
   background: var(--bg-warm);
   color:#0f172a;
 }
-.card{background:white;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
-pre.code{
-  background: var(--code-bg);
-  color: #e6f3f1;
-  padding:1rem;
-  border-radius:10px;
-  overflow:auto;
-  font-family: ui-monospace, monospace;
-}
-code.inline{
-  background: rgba(3,105,161,0.06);
-  padding:0.12rem 0.45rem;
-  border-radius:6px;
-  font-family: ui-monospace, monospace;
-}
-.btn{
-  display:inline-flex;
-  align-items:center;
-  gap:.5rem;
-  padding:.5rem .9rem;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
+.card{background:white;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);padding:1.5rem;margin-bottom:1.5rem;}
+pre.code{background: var(--code-bg); color:#e6f3f1; padding:1rem; border-radius:10px; overflow:auto; font-family:ui-monospace, monospace; font-size:1rem; line-height:1.6;}
+code.inline{background: rgba(3,105,161,0.06); padding:0.12rem 0.45rem; border-radius:6px; font-family:ui-monospace, monospace;}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:10px;font-weight:600;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease;}
 .btn:active{transform: translateY(1px);}
 .btn-primary{background:linear-gradient(90deg,var(--brand-1),var(--brand-2));color:white;box-shadow:0 8px 20px rgba(3,105,161,0.12);}
 .btn-ghost{background:white;border:1px solid rgba(3,105,161,0.08);color:var(--brand-2);}
+details summary{list-style:none;cursor:pointer;padding:.75rem 1rem;border-radius:10px;background:linear-gradient(180deg, rgba(6,95,70,0.04), transparent);font-weight:600;}
+details[open] summary{background:linear-gradient(180deg, rgba(3,105,161,0.06), transparent);}
+details>.content{padding:0.75rem 1rem 1rem 1rem;}
+.small{font-size:.95rem;color:var(--muted);}
+@media (max-width:768px){ html { font-size:17px; } }
 </style>
 </head>
 
@@ -63,40 +47,43 @@ code.inline{
     <span class="font-semibold text-lg text-slate-800">Curso MongoDB</span>
   </a>
   <div class="flex items-center gap-3 text-sm font-medium">
+    <a href="../modulos/modulo0.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 0</a>
     <a href="../modulos/modulo1.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 1</a>
     <a href="#" class="px-3 py-2 rounded bg-slate-100 text-slate-900 font-semibold">Módulo 2</a>
     <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
     <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
     <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
-    <a href="../modulos/modulo6.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 6</a>
-    <a href="../modulos/modulo7.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 7</a>
+
   </div>
 </nav>
 </header>
 
 <main class="max-w-6xl mx-auto px-6 py-10">
 
-<!-- Header -->
+<!-- Hero -->
 <section class="mb-8 text-center">
-  <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🧩 MÓDULO 2 — De lo Relacional a lo Documental</h1>
-  <p class="text-lg text-gray-600 mt-2">Duración: <strong>3 horas</strong> • Nivel: <strong>Básico</strong></p>
+  <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">🧩 Módulo 2 — Modelado documental y tipos de datos</h1>
+  <p class="text-lg text-gray-600 mt-2">Duración: <strong>2 horas</strong> • Nivel: <strong>Básico</strong></p>
   <div class="mt-4 flex items-center justify-center gap-3">
     <button class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
   </div>
 </section>
 
-<!-- Objetivos -->
-<section class="card p-6 mb-6">
+<!-- Objetivos combinados -->
+<section class="card">
 <h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
 <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
 <li>Comprender cómo tablas, filas y relaciones se traducen a documentos y colecciones.</li>
 <li>Identificar equivalencias entre SQL y MongoDB.</li>
 <li>Aprender a transformar un esquema relacional a diseño embebido o referencial.</li>
+<li>Identificar los principales tipos de datos de MongoDB y su representación BSON.</li>
+<li>Diferenciar cómo se almacenan internamente los documentos y usar tipos adecuados.</li>
+<li>Aplicar los tipos de datos en ejemplos reales (fechas, números, arrays, objetos, booleanos, nulos, etc.).</li>
 </ul>
 </section>
 
 <!-- 1. Recordemos SQL -->
-<section class="card p-6 mb-6">
+<section class="card">
 <h4 class="text-xl font-semibold mb-2">1. Recordemos: modelo relacional (SQL)</h4>
 <p class="text-gray-700 mb-3">Las bases relacionales usan tablas con columnas fijas, filas y relaciones mediante claves primarias y foráneas.</p>
 <div class="overflow-x-auto mb-4">
@@ -118,8 +105,8 @@ code.inline{
 </ul>
 </section>
 
-<!-- 2. Equivalencias -->
-<section class="card p-6 mb-6">
+<!-- 2. Equivalencias SQL ↔ MongoDB -->
+<section class="card">
 <h4 class="text-xl font-semibold mb-3">2. Equivalencias SQL ↔ MongoDB</h4>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
@@ -141,28 +128,47 @@ code.inline{
 </section>
 
 <!-- 3. Relaciones y diseño -->
-<section class="card p-6 mb-6">
+<section class="card">
 <h4 class="text-xl font-semibold mb-3">3. Relaciones y diseño embebido/referencial</h4>
 <p class="text-gray-700 mb-2">MongoDB permite:</p>
 <ul class="list-disc pl-5 text-gray-700">
 <li>Diseño embebido: todos los datos relacionados en un solo documento (rápido para lecturas).</li>
 <li>Diseño referencial: datos relacionados en colecciones separadas (útil para datos muy grandes o compartidos).</li>
 </ul>
-<p class="text-gray-700">Ejemplos:</p>
+<p class="text-gray-700">Ejemplo:</p>
 <pre class="code">
--- SQL
-SELECT * FROM pedidos JOIN clientes ON pedidos.id_cliente = clientes.id_cliente;
-
--- MongoDB referencial
+// MongoDB referencial
 db.pedidos.aggregate([
   { $lookup: { from: "clientes", localField: "id_cliente", foreignField: "_id", as: "cliente" } }
 ]);
 </pre>
 </section>
 
-<!-- 4. Ejemplo práctico -->
-<section class="card p-6 mb-6">
-<h4 class="text-xl font-semibold mb-3">4. Ejemplo práctico: autores y libros</h4>
+<!-- 4. Tipos de datos en MongoDB/BSON -->
+<section class="card">
+<h4 class="text-xl font-semibold mb-3">4. Tipos de datos en MongoDB/BSON</h4>
+<div class="overflow-x-auto mb-4">
+<table class="w-full border border-gray-200 rounded-xl text-left text-gray-700">
+<thead class="bg-green-100">
+<tr><th class="p-3">Tipo</th><th class="p-3">Descripción</th><th class="p-3">Ejemplo</th></tr>
+</thead>
+<tbody>
+<tr class="border-t"><td class="p-3 font-medium">String</td><td class="p-3">Cadena de texto UTF-8</td><td>"Hola Mundo"</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Number</td><td class="p-3">Enteros o decimales</td><td>42, 3.14</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Boolean</td><td class="p-3">Verdadero o falso</td><td>true, false</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Date</td><td class="p-3">Fechas y horas</td><td>ISODate("2025-10-28T00:00:00Z")</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Array</td><td class="p-3">Lista de valores</td><td>[1,2,3], ["a","b","c"]</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Object</td><td class="p-3">Documento embebido</td><td>{"nombre":"Diego","edad":30}</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">Null</td><td class="p-3">Valor nulo</td><td>null</td></tr>
+<tr class="border-t"><td class="p-3 font-medium">ObjectId</td><td class="p-3">Identificador único</td><td>ObjectId("652e...")</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- 5. Ejemplo práctico -->
+<section class="card">
+<h4 class="text-xl font-semibold mb-3">5. Ejemplo práctico: Autores y Libros</h4>
 <p class="text-gray-700">Diseño embebido:</p>
 <pre class="code">
 {
@@ -184,172 +190,101 @@ db.libros.insertMany([
 </pre>
 </section>
 
-<!-- 5. Ejercicio práctico: Tienda en línea -->
-<section class="card p-6 mb-6">
-  <h4 class="text-xl font-semibold mb-3">5. Ejercicio práctico: Tienda en línea</h4>
-  <p class="text-gray-700 mb-2">
-  Eres responsable de la base de datos de una tienda en línea. La tienda maneja información sobre productos, clientes y pedidos.
-  </p>
-  
-  <p class="text-gray-700 mb-2">Tablas SQL iniciales:</p>
-  <div class="overflow-x-auto mb-4">
-  <table class="w-full text-left border-collapse">
-  <thead>
-  <tr class="text-sm text-gray-600"><th class="p-2 border-b">Tabla</th><th class="p-2 border-b">Columnas principales</th></tr>
-  </thead>
-  <tbody>
-  <tr><td class="p-2 border-b">clientes</td><td class="p-2 border-b">id_cliente, nombre, correo</td></tr>
-  <tr><td class="p-2 border-b">productos</td><td class="p-2 border-b">id_producto, nombre, precio</td></tr>
-  <tr><td class="p-2 border-b">pedidos</td><td class="p-2 border-b">id_pedido, id_cliente, fecha, total</td></tr>
-  <tr><td class="p-2 border-b">detalle_pedidos</td><td class="p-2 border-b">id_detalle, id_pedido, id_producto, cantidad, precio_unitario</td></tr>
-  </tbody>
-  </table>
-  </div>
-  
-  <p class="text-gray-700 mb-2">Tu tarea es:</p>
-  <ol class="list-decimal pl-6 space-y-1 text-gray-700">
-  <li>Diseñar un documento en MongoDB usando <strong>diseño embebido</strong>, donde cada pedido tenga un array de productos comprados.</li>
-  <li>Diseñar un esquema con <strong>diseño referencial</strong>, donde clientes, productos y pedidos estén en colecciones separadas y se relacionen mediante referencias.</li>
-  <li>Insertar al menos 2 clientes, 3 productos y 2 pedidos en cada diseño.</li>
-  <li>Explicar cuál diseño sería más eficiente si la tienda consulta con frecuencia los productos de un pedido específico.</li>
-  </ol>
-  
-  <p class="text-gray-700 font-semibold mt-2">Objetivo del ejercicio:</p>
-  <ul class="list-disc pl-6 text-gray-700">
-  <li>Practicar la conversión de un modelo relacional a uno documental.</li>
-  <li>Comprender cuándo conviene usar embebido o referencial según el tipo de consultas.</li>
-  <li>Aprender a estructurar documentos MongoDB para un escenario del mundo real muy común.</li>
-  </ul>
-  </section>  
-  
-
-<!-- 6. Quiz interactivo completo (10 preguntas) -->
-<section class="card p-6 mb-6">
-<h4 class="text-xl font-semibold mb-3">📝 6. Quiz completo</h4>
-
-<div class="space-y-4">
-
-<div>
-<p class="font-semibold">1. ¿Equivalente de una tabla en MongoDB?</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q1" value="B"> Colección</label>
-<label><input type="radio" name="q1" value="A"> Campo</label>
-<label><input type="radio" name="q1" value="C"> Documento</label>
+<!-- 6. Ejercicio combinado -->
+<section class="card">
+<h4 class="text-xl font-semibold mb-3">6. Ejercicio práctico combinado</h4>
+<p class="text-gray-700 mb-2">Crear un documento MongoDB para un estudiante:</p>
+<ul class="list-disc pl-6 mb-3">
+<li>Nombre (String)</li>
+<li>Edad (Number)</li>
+<li>¿Activo? (Boolean)</li>
+<li>Fecha de inscripción (Date)</li>
+<li>Materias (Array)</li>
+<li>Dirección (Object con calle y ciudad)</li>
+</ul>
+<details>
+<summary>Ver solución</summary>
+<div class="content">
+<pre class="code">
+{
+  "nombre": "Ana Pérez",
+  "edad": 21,
+  "activo": true,
+  "fecha_inscripcion": ISODate("2025-10-28T00:00:00Z"),
+  "materias": ["Matemáticas", "Historia", "Inglés"],
+  "direccion": {
+    "calle": "Calle 123",
+    "ciudad": "Medellín"
+  }
+}
+</pre>
 </div>
-</div>
-
-<div>
-<p class="font-semibold">2. Relación rápida para lectura de datos relacionados:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q2" value="A"> Embebido</label>
-<label><input type="radio" name="q2" value="B"> Referencial</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">3. ¿Qué es un documento?</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q3" value="A"> Una fila en MongoDB</label>
-<label><input type="radio" name="q3" value="B"> Una tabla</label>
-<label><input type="radio" name="q3" value="C"> Una base de datos</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">4. JOIN en MongoDB se hace con:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q4" value="A"> $lookup</label>
-<label><input type="radio" name="q4" value="B"> $match</label>
-<label><input type="radio" name="q4" value="C"> $group</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">5. PRIMARY KEY en MongoDB es:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q5" value="A"> _id</label>
-<label><input type="radio" name="q5" value="B"> id</label>
-<label><input type="radio" name="q5" value="C"> key</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">6. Relación 1 a muchos:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q6" value="A"> Cliente → Pedidos</label>
-<label><input type="radio" name="q6" value="B"> Cliente → Perfil</label>
-<label><input type="radio" name="q6" value="C"> Pedidos ↔ Productos</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">7. SQL → MongoDB flexible o rígido?</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q7" value="A"> Flexible</label>
-<label><input type="radio" name="q7" value="B"> Rígido</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">8. Embebido es útil para:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q8" value="A"> Lecturas rápidas</label>
-<label><input type="radio" name="q8" value="B"> Datos compartidos grandes</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">9. Referencial se recomienda para:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q9" value="A"> Datos grandes o compartidos</label>
-<label><input type="radio" name="q9" value="B"> Documentos pequeños</label>
-</div>
-</div>
-
-<div>
-<p class="font-semibold">10. Un campo en MongoDB equivale a:</p>
-<div class="flex flex-col gap-2 ml-4">
-<label><input type="radio" name="q10" value="A"> Columna</label>
-<label><input type="radio" name="q10" value="B"> Fila</label>
-<label><input type="radio" name="q10" value="C"> Documento</label>
-</div>
-</div>
-
-<button class="btn btn-primary mt-2" onclick="checkQuiz()">Verificar respuestas</button>
-<div id="quizResult" class="mt-2 font-semibold"></div>
-</div>
+</details>
 </section>
 
-<!-- Reflexión final -->
-<section class="card p-6 mb-6">
-<h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
-<ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
-<li>MongoDB no reemplaza SQL; ofrece otra forma de modelar datos.</li>
-<li>Decidir qué embebes y qué referencias según uso es clave.</li>
-<li>Entender 1-1, 1-N y N-N es esencial para colecciones eficientes.</li>
-</ul>
+<!-- 7. Quiz interactivo -->
+<section class="card">
+<h4 class="text-xl font-semibold mb-3">📝 Quiz combinado (20 preguntas)</h4>
+<div id="quiz"></div>
 </section>
 
 <footer class="mt-10 text-center text-sm text-gray-500">
-  <p>📘 Guía de apoyo educativo — Versión 2025
-    Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
+  <p>📘 Guía de apoyo educativo — Versión 2025. Desarrollada por Diego López con apoyo de IA para fines formativos.</p>
 </footer>
+
 </main>
 
 <script>
-function checkQuiz(){
-  const answers = {
-    q1:'B', q2:'A', q3:'A', q4:'A', q5:'A',
-    q6:'A', q7:'A', q8:'A', q9:'A', q10:'A'
-  };
-  let score = 0;
-  for(let i=1;i<=10;i++){
-    const val = document.querySelector('input[name="q'+i+'"]:checked')?.value;
-    if(val===answers['q'+i]) score++;
-  }
-  const res = document.getElementById('quizResult');
-  res.innerText = `Respuestas correctas: ${score}/10`;
-}
+// Quiz de módulo 2+3
+const quizData = [
+  {question:"1. ¿Equivalente de una tabla en MongoDB?", options:["Colección","Campo","Documento"], answer:"Colección"},
+  {question:"2. Relación rápida para lectura de datos relacionados:", options:["Embebido","Referencial"], answer:"Embebido"},
+  {question:"3. ¿Qué es un documento?", options:["Una fila en MongoDB","Una tabla","Una base de datos"], answer:"Una fila en MongoDB"},
+  {question:"4. JOIN en MongoDB se hace con:", options:["$lookup","$match","$group"], answer:"$lookup"},
+  {question:"5. PRIMARY KEY en MongoDB es:", options:["_id","id","key"], answer:"_id"},
+  {question:"6. Relación 1 a muchos:", options:["Cliente → Pedidos","Cliente → Perfil","Pedidos ↔ Productos"], answer:"Cliente → Pedidos"},
+  {question:"7. SQL → MongoDB flexible o rígido?", options:["Flexible","Rígido"], answer:"Flexible"},
+  {question:"8. Embebido es útil para:", options:["Lecturas rápidas","Datos compartidos grandes"], answer:"Lecturas rápidas"},
+  {question:"9. Referencial se recomienda para:", options:["Datos grandes o compartidos","Documentos pequeños"], answer:"Datos grandes o compartidos"},
+  {question:"10. Un campo en MongoDB equivale a:", options:["Columna","Fila","Documento"], answer:"Columna"},
+  {question:"11. ¿Qué tipo de dato usarías para almacenar un texto?", options:["String","Number","Boolean","ObjectId"], answer:"String"},
+  {question:"12. Función de ObjectId:", options:["Almacenar números","Identificador único de documento","Cadena de texto","Fecha"], answer:"Identificador único de documento"},
+  {question:"13. Cómo se representa un valor nulo?", options:["0","null","''","undefined"], answer:"null"},
+  {question:"14. Tipo para lista de materias?", options:["Array","Object","String","Boolean"], answer:"Array"},
+  {question:"15. Cómo se almacena una fecha en MongoDB?", options:["Date","String","Number","Boolean"], answer:"Date"},
+  {question:"16. Cuál no es un tipo BSON?", options:["String","Symbol","Binary","Function"], answer:"Function"},
+  {question:"17. Tipo para verdadero o falso?", options:["Boolean","String","Number","Date"], answer:"Boolean"},
+  {question:"18. Diferencia JSON vs BSON?", options:["JSON es binario, BSON es texto","JSON es texto, BSON es binario","Ambos son texto","Ambos son binarios"], answer:"JSON es texto, BSON es binario"},
+  {question:"19. Tipo para documento embebido?", options:["Object","Array","String","Boolean"], answer:"Object"},
+  {question:"20. Ejemplo de Array válido?", options:["{1,2,3}","[1,2,3]","(1,2,3)","<1,2,3>"], answer:"[1,2,3]"}
+];
+
+const quizContainer = document.getElementById('quiz');
+quizData.forEach((q, idx)=>{
+  const div=document.createElement('div');
+  div.className='mb-4 p-4 border rounded-lg bg-blue-50';
+  div.innerHTML=`<p class="font-semibold">${q.question}</p>
+    <div class="mt-2 space-y-2">
+      ${q.options.map(o=>`<button class="btn btn-ghost w-full text-left option">${o}</button>`).join('')}
+    </div>
+    <p class="mt-2 small correct" style="display:none;color:green;">✅ Correcto!</p>
+    <p class="mt-2 small wrong" style="display:none;color:red;">❌ Incorrecto. La respuesta correcta es: <strong>${q.answer}</strong></p>
+  `;
+  quizContainer.appendChild(div);
+
+  div.querySelectorAll('.option').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      if(e.target.textContent===q.answer){
+        div.querySelector('.correct').style.display='block';
+        div.querySelector('.wrong').style.display='none';
+      }else{
+        div.querySelector('.correct').style.display='none';
+        div.querySelector('.wrong').style.display='block';
+      }
+    });
+  });
+});
 </script>
+
 </body>
 </html>
