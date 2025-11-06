@@ -19,8 +19,9 @@ body{
   line-height:1.6;
   background: var(--bg-warm);
   color:#0f172a;
+  scroll-behavior:smooth;
 }
-.card{background:white;border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
+.card{background:white;border-radius:16px;box-shadow:0 10px 30px rgba(2,6,23,0.06);}
 pre.code{
   background: var(--code-bg);
   color: #e6f3f1;
@@ -39,15 +40,21 @@ code.inline{
   display:inline-flex;
   align-items:center;
   gap:.5rem;
-  padding:.5rem .9rem;
+  padding:.6rem 1rem;
   border-radius:10px;
   font-weight:600;
   cursor:pointer;
   transition: transform .12s ease, box-shadow .12s ease;
 }
-.btn:active{transform: translateY(1px);}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(3,105,161,0.18);}
+.btn:active{transform:translateY(1px);}
 .btn-primary{background:linear-gradient(90deg,var(--brand-1),var(--brand-2));color:white;box-shadow:0 8px 20px rgba(3,105,161,0.12);}
 .btn-ghost{background:white;border:1px solid rgba(3,105,161,0.08);color:var(--brand-2);}
+mark{
+  background: rgba(14,165,164,0.15);
+  padding: 0.1rem 0.3rem;
+  border-radius:4px;
+}
 </style>
 </head>
 
@@ -84,6 +91,15 @@ code.inline{
   </div>
 </section>
 
+<!-- Contexto motivacional -->
+<section class="card p-6 mb-6">
+  <h3 class="text-2xl font-semibold mb-3 text-slate-900">🚀 Contexto inicial</h3>
+  <p class="text-gray-700 text-lg leading-relaxed">
+    Hoy aprenderás cómo se almacenan los datos de una app real, como <mark>Netflix</mark> o <mark>Mercado Libre</mark>, usando MongoDB. 
+    Descubrirás cómo los documentos y colecciones reemplazan las tablas tradicionales para ofrecer <strong>flexibilidad, velocidad y escalabilidad</strong>.
+  </p>
+</section>
+
 <!-- Objetivos -->
 <section class="card p-6 mb-6">
 <h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
@@ -100,18 +116,20 @@ code.inline{
 <section class="card p-6 mb-6">
 <h4 class="text-xl font-semibold mb-3">1️⃣ ¿Qué es una base de datos NoSQL?</h4>
 <p class="text-gray-700 mb-2">NoSQL significa “Not Only SQL” y agrupa sistemas que no usan tablas tradicionales, permitiendo almacenar datos de manera flexible.</p>
-<ul class="list-disc pl-5 text-gray-700">
+<ul class="list-disc pl-5 text-gray-700 mb-3">
 <li><strong>Clave-valor:</strong> Redis — cachés y sesiones.</li>
 <li><strong>Columnares:</strong> Cassandra — analítica.</li>
 <li><strong>Grafos:</strong> Neo4j — relaciones complejas.</li>
 <li><strong>Documentales:</strong> MongoDB — aplicaciones web/móviles.</li>
 </ul>
-<pre class="code">
-miBaseDeDatos
- └── usuarios
-       ├── { nombre: "Ana", edad: 25 }
-       ├── { nombre: "Luis", edad: 30 }
-</pre>
+
+<!-- Diagrama visual -->
+<div class="bg-slate-50 p-4 rounded-lg font-mono text-sm leading-6 text-gray-800">
+📦 <strong>miBaseDeDatos</strong><br>
+ ├── 🗂️ <strong>usuarios</strong><br>
+ │&nbsp;&nbsp;&nbsp;&nbsp;├── { nombre: "Ana", edad: 25 }<br>
+ │&nbsp;&nbsp;&nbsp;&nbsp;└── { nombre: "Luis", edad: 30 }
+</div>
 </section>
 
 <!-- 2. Arquitectura -->
@@ -167,7 +185,7 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 </pre>
 </section>
 
-<!-- 5. Instalación y entorno -->
+<!-- 5. Instalación -->
 <section class="card p-6 mb-6">
 <h4 class="text-xl font-semibold mb-3">5️⃣ Instalación y entorno de trabajo</h4>
 <p class="text-gray-700 mb-2">🖥️ <strong>MongoDB local:</strong></p>
@@ -176,7 +194,7 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 <li>Instala MongoDB Compass.</li>
 <li>Conecta a <code class="inline">mongodb://localhost:27017</code></li>
 </ul>
-<p class="text-gray-700 mb-2">☁️ <strong>MongoDB Atlas:</strong></p>
+<p class="text-gray-700 mb-2 mt-3">☁️ <strong>MongoDB Atlas:</strong></p>
 <ul class="list-disc pl-5 text-gray-700">
 <li>Crea cuenta en Atlas.</li>
 <li>Cluster gratuito (M0 Sandbox).</li>
@@ -207,7 +225,7 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 </pre>
 </section>
 
-<!-- 7. Ejercicio -->
+<!-- 7. Ejercicio práctico -->
 <section class="card p-6 mb-6">
 <h4 class="text-xl font-semibold mb-3">7️⃣ Ejercicio práctico guiado</h4>
 <p class="text-gray-700 mb-2">Crea la base <code class="inline">biblioteca</code> y colección <code class="inline">libros</code> en Atlas o Compass e inserta:</p>
@@ -226,9 +244,15 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 }
 </pre>
 <p class="text-gray-700">Ejecuta <code class="inline">db.libros.find()</code> y observa los resultados.</p>
+
+<!-- Extra: tarea opcional -->
+<div class="mt-4 bg-emerald-50 border border-emerald-200 p-4 rounded-lg text-gray-800">
+  🌟 <strong>Desafío opcional:</strong> agrega un tercer libro con un nuevo campo (por ejemplo, <code class="inline">paginas</code> o <code class="inline">editorial</code>) y verifica que MongoDB lo acepta sin error.  
+  <em>Así comprobarás su flexibilidad de esquema.</em>
+</div>
 </section>
 
-<!-- Quiz interactivo -->
+<!-- Quiz -->
 <section class="card p-6 mb-6">
 <h4 class="text-xl font-semibold mb-3">📝 Quiz rápido — Módulo 1</h4>
 
@@ -273,6 +297,15 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 </div>
 </div>
 
+<div>
+<p class="font-semibold">6. ¿Qué comando muestra todos los documentos de una colección?</p>
+<div class="flex flex-col gap-2 ml-4">
+<label><input type="radio" name="q6" value="A"> SELECT * FROM</label>
+<label><input type="radio" name="q6" value="B"> db.libros.find()</label>
+<label><input type="radio" name="q6" value="C"> SHOW TABLES</label>
+</div>
+</div>
+
 <button class="btn btn-primary mt-2" onclick="checkQuiz()">Verificar respuestas</button>
 <div id="quizResult" class="mt-2 font-semibold"></div>
 </div>
@@ -288,23 +321,26 @@ ObjectId("653f2a8c3b1d4f9b5c3e4e9f")
 <li>Se pueden crear documentos con estructuras distintas sin errores.</li>
 <li>Atlas permite trabajar sin instalar nada localmente.</li>
 </ul>
+<p class="mt-3 text-emerald-700 text-lg font-medium">💬 MongoDB es más que una base de datos: es una forma moderna de pensar los datos.</p>
 </section>
 
 <footer class="mt-10 text-center text-sm text-gray-500">
-  <p>📘 Guía de apoyo educativo — Versión 2025
-    Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
+  <p>📘 Guía de apoyo educativo — Versión 2025  
+  Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
 </footer>
 </main>
 
 <script>
 function checkQuiz(){
-  const answers = {q1:'B',q2:'B',q3:'A',q4:'B',q5:'A'};
+  const answers = {q1:'B',q2:'B',q3:'A',q4:'B',q5:'A',q6:'B'};
   let score = 0;
-  for(let i=1;i<=5;i++){
+  for(let i=1;i<=6;i++){
     const val = document.querySelector('input[name="q'+i+'"]:checked')?.value;
     if(val===answers['q'+i]) score++;
   }
-  document.getElementById('quizResult').innerText = `Respuestas correctas: ${score}/5`;
+  const result = document.getElementById('quizResult');
+  result.innerText = `Respuestas correctas: ${score}/6`;
+  result.className = "mt-3 font-semibold " + (score>=5 ? "text-emerald-600" : "text-red-600");
 }
 </script>
 
