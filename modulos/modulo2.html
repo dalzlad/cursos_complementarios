@@ -31,6 +31,19 @@ details summary{list-style:none;cursor:pointer;padding:.75rem 1rem;border-radius
 details[open] summary{background:linear-gradient(180deg, rgba(3,105,161,0.06), transparent);}
 details>.content{padding:0.75rem 1rem 1rem 1rem;}
 .small{font-size:.95rem;color:var(--muted);}
+.diagram-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+}
+.diagram-card{
+  background:linear-gradient(180deg,#f0fdfa,#ecfeff);
+  border:1px solid #bae6fd;
+  border-radius:12px;
+  padding:1rem;
+  text-align:center;
+  font-weight:500;
+}
 @media (max-width:768px){ html { font-size:17px; } }
 </style>
 </head>
@@ -53,7 +66,6 @@ details>.content{padding:0.75rem 1rem 1rem 1rem;}
     <a href="../modulos/modulo3.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 3</a>
     <a href="../modulos/modulo4.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 4</a>
     <a href="../modulos/modulo5.html" class="px-3 py-2 rounded hover:bg-slate-50">Módulo 5</a>
-
   </div>
 </nav>
 </header>
@@ -69,7 +81,7 @@ details>.content{padding:0.75rem 1rem 1rem 1rem;}
   </div>
 </section>
 
-<!-- Objetivos combinados -->
+<!-- Objetivos -->
 <section class="card">
 <h3 class="text-2xl font-semibold text-slate-900 mb-3">🎯 Objetivos del módulo</h3>
 <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
@@ -82,9 +94,9 @@ details>.content{padding:0.75rem 1rem 1rem 1rem;}
 </ul>
 </section>
 
-<!-- 1. Recordemos SQL -->
+<!-- 1 -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-2">1. Recordemos: modelo relacional (SQL)</h4>
+<h3>📖 1. Recordemos: modelo relacional (SQL)</h3>
 <p class="text-gray-700 mb-3">Las bases relacionales usan tablas con columnas fijas, filas y relaciones mediante claves primarias y foráneas.</p>
 <div class="overflow-x-auto mb-4">
 <table class="w-full text-left border-collapse">
@@ -105,9 +117,21 @@ details>.content{padding:0.75rem 1rem 1rem 1rem;}
 </ul>
 </section>
 
-<!-- 2. Equivalencias SQL ↔ MongoDB -->
+<!-- Diagrama -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-3">2. Equivalencias SQL ↔ MongoDB</h4>
+<h3>📊 Diagrama visual: equivalencias SQL ↔ MongoDB</h3>
+<div class="diagram-grid mt-4">
+  <div class="diagram-card">Tabla → Colección</div>
+  <div class="diagram-card">Fila → Documento</div>
+  <div class="diagram-card">Columna → Campo</div>
+  <div class="diagram-card">PRIMARY KEY → _id</div>
+  <div class="diagram-card">FOREIGN KEY → Referencia / $lookup</div>
+</div>
+</section>
+
+<!-- 2 -->
+<section class="card">
+<h3>📗 2. Equivalencias SQL ↔ MongoDB</h3>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
@@ -127,26 +151,145 @@ details>.content{padding:0.75rem 1rem 1rem 1rem;}
 </div>
 </section>
 
-<!-- 3. Relaciones y diseño -->
-<section class="card">
-<h4 class="text-xl font-semibold mb-3">3. Relaciones y diseño embebido/referencial</h4>
-<p class="text-gray-700 mb-2">MongoDB permite:</p>
-<ul class="list-disc pl-5 text-gray-700">
-<li>Diseño embebido: todos los datos relacionados en un solo documento (rápido para lecturas).</li>
-<li>Diseño referencial: datos relacionados en colecciones separadas (útil para datos muy grandes o compartidos).</li>
-</ul>
-<p class="text-gray-700">Ejemplo:</p>
-<pre class="code">
-// MongoDB referencial
+<!-- 3 -->
+<section class="p-6 bg-gray-50 border border-gray-200 rounded-2xl">
+  <h3 class="text-2xl font-bold mb-4 text-blue-700">📘 3. Relaciones y diseño embebido/referencial</h3>
+
+  <p class="text-gray-700 mb-4">
+    En <strong>MongoDB</strong>, las relaciones entre datos se pueden representar de dos formas principales:
+    <strong>embebidas</strong> (todo en un solo documento) o <strong>referenciales</strong> (datos separados que se enlazan).
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- Diseño Embebido -->
+    <div class="bg-white border border-green-200 rounded-2xl p-5 shadow-sm">
+      <h4 class="text-xl font-semibold text-green-700 mb-2">🧩 Diseño embebido</h4>
+      <p class="text-gray-600 mb-3">
+        Todos los datos relacionados viven <strong>dentro del mismo documento</strong>. 
+        Es ideal para <strong>consultas rápidas</strong> y lecturas frecuentes.
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-600 mb-3">
+        <li>Rendimiento alto en lecturas simples.</li>
+        <li>Los datos siempre están juntos.</li>
+        <li>Perfecto si los datos no se consultan por separado.</li>
+      </ul>
+
+      <pre class="bg-gray-900 text-green-200 text-sm p-3 rounded-lg overflow-auto">
+{
+  "_id": 1,
+  "nombre": "Carlos",
+  "pedido": {
+    "fecha": "2025-11-08",
+    "total": 120000
+  }
+}
+      </pre>
+
+      <p class="text-sm text-gray-500 mt-2 italic text-center">
+        📦 Ejemplo: el pedido está dentro del documento del cliente.
+      </p>
+    </div>
+
+    <!-- Diseño Referencial -->
+    <div class="bg-white border border-blue-200 rounded-2xl p-5 shadow-sm">
+      <h4 class="text-xl font-semibold text-blue-700 mb-2">🔗 Diseño referencial</h4>
+      <p class="text-gray-600 mb-3">
+        Los datos se guardan en <strong>colecciones separadas</strong> y se vinculan 
+        mediante un <code>_id</code> o campo de referencia.
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-600 mb-3">
+        <li>Ideal para datos <strong>compartidos o grandes</strong>.</li>
+        <li>Evita duplicar información.</li>
+        <li>Más flexible para actualizar datos independientes.</li>
+      </ul>
+
+      <pre class="bg-gray-900 text-blue-200 text-sm p-3 rounded-lg overflow-auto">
+// Colección clientes
+db.clientes.insertOne({
+  _id: 1,
+  nombre: "Carlos"
+});
+
+// Colección pedidos
+db.pedidos.insertOne({
+  _id: 101,
+  fecha: "2025-11-08",
+  total: 120000,
+  id_cliente: 1
+});
+
+// Relación con $lookup
 db.pedidos.aggregate([
-  { $lookup: { from: "clientes", localField: "id_cliente", foreignField: "_id", as: "cliente" } }
+  {
+    $lookup: {
+      from: "clientes",
+      localField: "id_cliente",
+      foreignField: "_id",
+      as: "cliente"
+    }
+  }
 ]);
-</pre>
+      </pre>
+
+      <p class="text-sm text-gray-500 mt-2 italic text-center">
+        🔁 Ejemplo: los pedidos y clientes se relacionan por <code>id_cliente</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-2xl border border-gray-200">
+    <h4 class="font-semibold text-lg text-slate-800 mb-2">📊 Comparativo rápido</h4>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 text-sm">
+        <thead class="bg-gray-100">
+          <tr class="text-left text-gray-700">
+            <th class="py-2 px-3 border">Característica</th>
+            <th class="py-2 px-3 border text-green-700">Embebido</th>
+            <th class="py-2 px-3 border text-blue-700">Referencial</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="py-2 px-3 border">Ubicación</td>
+            <td class="py-2 px-3 border">En el mismo documento</td>
+            <td class="py-2 px-3 border">En colecciones separadas</td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 border">Velocidad de lectura</td>
+            <td class="py-2 px-3 border">Alta</td>
+            <td class="py-2 px-3 border">Media</td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 border">Actualización</td>
+            <td class="py-2 px-3 border">Más compleja</td>
+            <td class="py-2 px-3 border">Más flexible</td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 border">Ideal para</td>
+            <td class="py-2 px-3 border">Datos dependientes</td>
+            <td class="py-2 px-3 border">Datos compartidos</td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 border">Ejemplo típico</td>
+            <td class="py-2 px-3 border">Cliente con dirección</td>
+            <td class="py-2 px-3 border">Cliente con muchos pedidos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="mt-4 text-gray-700 italic">
+    💡 Consejo: usa diseño <strong>embebido</strong> para dependencias simples y 
+    <strong>referencial</strong> cuando necesites relaciones flexibles o datos reutilizables.
+  </p>
 </section>
 
-<!-- 4. Tipos de datos en MongoDB/BSON -->
+<!-- 4 -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-3">4. Tipos de datos en MongoDB/BSON</h4>
+<h3>📙 4. Tipos de datos en MongoDB/BSON</h3>
+<p class="text-gray-700 mb-4">Los principales tipos de datos de MongoDB se representan en formato BSON (Binary JSON).  
+Nota: el tipo <code class="inline">Symbol</code> existe en versiones antiguas pero está <strong>deprecado</strong>.</p>
 <div class="overflow-x-auto mb-4">
 <table class="w-full border border-gray-200 rounded-xl text-left text-gray-700">
 <thead class="bg-green-100">
@@ -166,9 +309,9 @@ db.pedidos.aggregate([
 </div>
 </section>
 
-<!-- 5. Ejemplo práctico -->
+<!-- 5 -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-3">5. Ejemplo práctico: Autores y Libros</h4>
+<h3>📗 5. Ejemplo práctico: Autores y Libros</h3>
 <p class="text-gray-700">Diseño embebido:</p>
 <pre class="code">
 {
@@ -190,9 +333,9 @@ db.libros.insertMany([
 </pre>
 </section>
 
-<!-- 6. Ejercicio combinado -->
+<!-- 6 -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-3">6. Ejercicio práctico combinado</h4>
+<h3>🧪 6. Ejercicio práctico combinado</h3>
 <p class="text-gray-700 mb-2">Crear un documento MongoDB para un estudiante:</p>
 <ul class="list-disc pl-6 mb-3">
 <li>Nombre (String)</li>
@@ -202,6 +345,7 @@ db.libros.insertMany([
 <li>Materias (Array)</li>
 <li>Dirección (Object con calle y ciudad)</li>
 </ul>
+<p class="text-gray-700 mb-3 italic">💡 Sugerencia: inserta este documento en MongoDB Compass o Atlas y luego ejecuta <code class="inline">db.estudiantes.find().pretty()</code> para ver el resultado estructurado.</p>
 <details>
 <summary>Ver solución</summary>
 <div class="content">
@@ -222,9 +366,9 @@ db.libros.insertMany([
 </details>
 </section>
 
-<!-- 7. Quiz interactivo -->
+<!-- Quiz -->
 <section class="card">
-<h4 class="text-xl font-semibold mb-3">📝 Quiz combinado (20 preguntas)</h4>
+<h3>📝 Quiz combinado (20 preguntas)</h3>
 <div id="quiz"></div>
 </section>
 

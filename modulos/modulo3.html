@@ -49,6 +49,13 @@
     .small { font-size: .95rem; color:var(--muted); }
     .kbd { background:#111827;color:white;padding:2px 8px;border-radius:6px;font-family:ui-monospace,monospace;font-size:.9rem }
 
+    .infographic {
+      display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap;
+      font-weight:700; color:var(--muted);
+    }
+    .infographic .step { display:flex; gap:8px; align-items:center; padding:.6rem .9rem; border-radius:12px; background:linear-gradient(180deg,#ffffff,#f8feff); box-shadow:0 6px 18px rgba(2,6,23,0.04); border:1px solid rgba(3,105,161,0.04); }
+    .note { font-size:.95rem; color:#0f172a; background:#f8fafc; padding:.6rem; border-radius:8px; border-left:4px solid #06b6d4; }
+
     @media (max-width:768px){
       html { font-size:17px; }
     }
@@ -87,19 +94,16 @@
       <p class="text-lg text-gray-600 mt-2">Duración: <strong>2 horas</strong> • Nivel: <strong>Básico</strong></p>
 
       <div class="mt-4 flex items-center justify-center gap-3">
-        <button id="openIndex" class="btn btn-ghost" onclick="location.href='../index.html'">Volver al índice</button>
+        <a href="../index.html" class="btn btn-ghost">Volver al índice</a>
       </div>
     </section>
 
     <!-- Summary -->
-    <section class="card p-6 mb-6 flex items-center justify-between gap-6">
+    <section class="card p-6 mb-6">
       <div>
         <div class="text-sm text-gray-500">Objetivos</div>
         <h2 class="text-xl font-semibold text-slate-900">Dominar operaciones Create, Read, Update y Delete en MongoDB</h2>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="text-sm text-gray-500">Progreso módulo</div>
-        <div id="progressLabel" class="text-teal-700 font-semibold">0% completado</div>
+        <p class="small mt-2">Este módulo cubre ejemplos prácticos en shell/Compass y ejercicios para consolidar aprendizaje.</p>
       </div>
     </section>
 
@@ -109,7 +113,7 @@
       <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
         <li>Realizar inserciones simples y múltiples con <code class="inline">insertOne</code> y <code class="inline">insertMany</code>.</li>
         <li>Consultar datos con <code class="inline">find</code>, filtros y proyecciones.</li>
-        <li>Actualizar documentos con <code class="inline">updateOne</code>, <code class="inline">updateMany</code> y operadores (<code class="inline">$set</code>, <code class="inline">$inc</code>).</li>
+        <li>Actualizar documentos con <code class="inline">updateOne</code>, <code class="inline">updateMany</code> y operadores (<code class="inline">$set</code>, <code class="inline">$inc</code>, <code class="inline">$mul</code>).</li>
         <li>Eliminar documentos con <code class="inline">deleteOne</code> y <code class="inline">deleteMany</code>.</li>
         <li>Usar buenas prácticas: proyecciones, índices simples y evitar operaciones costosas innecesarias.</li>
       </ul>
@@ -196,36 +200,36 @@
       </details>
     </section>
 
-    <!-- 3. Update -->
+    <!-- 3. Update (AMPLIADA) -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">3. Update — Modificar documentos</h4>
+      <h4 class="text-xl font-semibold mb-3">3. Update — Modificar documentos (ampliado)</h4>
 
-      <details class="mb-4">
-        <summary>Operadores comunes</summary>
+      <details class="mb-4" open>
+        <summary>Operadores principales y ejemplos prácticos</summary>
         <div class="content">
-          <p class="small">Usa <code class="inline">$set</code>, <code class="inline">$inc</code>, <code class="inline">$push</code>, <code class="inline">$pull</code> y otros operadores para actualizar documentos sin reemplazarlos por completo.</p>
+          <p class="small">En MongoDB se usan operadores para modificar campos sin reemplazar todo el documento. Aquí tienes ejemplos útiles y consejos.</p>
 
           <div class="grid md:grid-cols-2 gap-4 mt-3">
             <div>
-              <h5 class="font-semibold">updateOne + $set</h5>
+              <h5 class="font-semibold">Actualizar un campo con <code>$set</code></h5>
               <pre class="code">db.productos.updateOne(
   { nombre: "Camiseta" },
-  { $set: { precio: 36000 } }
+  { $set: { precio: 38000 } }
 )</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.updateOne({ nombre: "Camiseta" }, { $set: { precio: 36000 } })'>Copiar</button>
+              <button class="btn btn-ghost" data-copy='db.productos.updateOne({ nombre: "Camiseta" }, { $set: { precio: 38000 } })'>Copiar</button>
             </div>
 
             <div>
-              <h5 class="font-semibold">updateMany + $inc</h5>
+              <h5 class="font-semibold">Incrementar valores numéricos con <code>$inc</code></h5>
               <pre class="code">db.productos.updateMany(
-  { categorias: "oferta" },
-  { $inc: { precio: -2000 } }
+  { stock: { $lt: 10 } },
+  { $inc: { stock: 5 } }
 )</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.updateMany({ categorias: "oferta" }, { $inc: { precio: -2000 } })'>Copiar</button>
+              <button class="btn btn-ghost" data-copy='db.productos.updateMany({ stock: { $lt: 10 } }, { $inc: { stock: 5 } })'>Copiar</button>
             </div>
 
             <div>
-              <h5 class="font-semibold">$push / $pull en arrays</h5>
+              <h5 class="font-semibold">Agregar a arrays con <code>$push</code></h5>
               <pre class="code">db.productos.updateOne(
   { nombre: "Camiseta" },
   { $push: { categorias: "nuevo" } }
@@ -234,16 +238,36 @@
             </div>
 
             <div>
-              <h5 class="font-semibold">Reemplazar documento (replaceOne)</h5>
-              <pre class="code">db.productos.replaceOne(
-  { nombre: "Gorra" },
-  { nombre: "Gorra", precio: 18000, stock: 30 }
+              <h5 class="font-semibold">Multiplicar valores con <code>$mul</code> (útil para reajustar precios)</h5>
+              <pre class="code">db.productos.updateMany(
+  { },
+  { $mul: { precio: 1.10 } } // aumenta precio en 10%
 )</pre>
-              <button class="btn btn-ghost" data-copy='db.productos.replaceOne({ nombre: "Gorra" }, { nombre: "Gorra", precio: 18000, stock: 30 })'>Copiar</button>
+              <button class="btn btn-ghost" data-copy='db.productos.updateMany({}, { $mul: { precio: 1.10 } })'>Copiar</button>
+            </div>
+
+            <div>
+              <h5 class="font-semibold">Usar <code>$currentDate</code> para marcar modificaciones</h5>
+              <pre class="code">db.productos.updateOne(
+  { nombre: "Camiseta" },
+  { $set: { precio: 40000 }, $currentDate: { lastModified: true } }
+)</pre>
+              <button class="btn btn-ghost" data-copy='db.productos.updateOne({ nombre: "Camiseta" }, { $set: { precio: 40000 }, $currentDate: { lastModified: true } })'>Copiar</button>
+            </div>
+
+            <div>
+              <h5 class="font-semibold">Reemplazo total con <code>replaceOne</code> (precaución)</h5>
+              <pre class="code">db.productos.replaceOne(
+  { _id: ObjectId("...") },
+  { nombre: "Nuevo", precio: 0, stock: 0 }
+)</pre>
+              <div class="small mt-1">Precaución: <code>replaceOne</code> reemplaza TODO el documento — conserva solo los campos que incluyas.</div>
             </div>
           </div>
 
-          <p class="mt-3 small">Precaución: <code class="inline">replaceOne</code> reemplaza TODO el documento, pierde campos que no incluyas.</p>
+          <div class="mt-4 note">
+            💡 Tip: cuando registres cambios, combina <code>$set</code> con <code>$currentDate</code> para llevar trazabilidad de modificaciones.
+          </div>
         </div>
       </details>
     </section>
@@ -276,27 +300,54 @@
       </details>
     </section>
 
-    <!-- 5. Buenas prácticas -->
+    <!-- Bloque visual (infografía CRUD) -->
     <section class="card p-6 mb-6">
-      <h4 class="text-xl font-semibold mb-3">5. Buenas prácticas rápidas</h4>
+      <h4 class="text-xl font-semibold mb-3">Bloque visual — Flujo CRUD</h4>
+      <div class="infographic p-4">
+        <div class="step">📦 <span>Create</span></div>
+        <div class="step">📋 <span>Read</span></div>
+        <div class="step">✏️ <span>Update</span></div>
+        <div class="step">🗑️ <span>Delete</span></div>
+      </div>
+      <p class="small mt-3">Secuencia típica: <strong>Create → Read → Update → Delete</strong>. Usa este flujo como checklist al diseñar endpoints o scripts de mantenimiento.</p>
+    </section>
 
-      <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
-        <li>Usa proyecciones para transferir menos datos: <code class="inline">find({}, { campo: 1 })</code>.</li>
-        <li>Haz índices en campos consultados con frecuencia.</li>
-        <li>Evita operaciones que recorran toda la colección sin filtro (<code class="inline">find()</code> sin índice).</li>
-        <li>En actualizaciones masivas, planifica y prueba en staging primero.</li>
-        <li>Cuando sea posible, usa transacciones para operaciones multi-documento (MongoDB replica sets / Atlas).</li>
-      </ul>
+    <!-- Errores comunes -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">⚠️ Errores comunes</h4>
+      <div class="content">
+        <ul class="list-disc pl-6 text-lg text-gray-700">
+          <li>Usar <code>updateOne</code> sin filtro específico → actualiza documentos inesperados.</li>
+          <li>Olvidar el <code>$set</code> y reemplazar documentos completos por accidente.</li>
+          <li>Ejecutar <code>deleteMany()</code> sin un <code>where</code> correcto.</li>
+          <li>No usar <code>_id</code> como referencia en actualizaciones críticas (pierdes precisión).</li>
+        </ul>
+        <p class="small mt-3">Regla práctica: <strong>si la operación afecta muchos documentos, primero prueba en staging y/o haz un <code>find()</code> con el mismo filtro.</strong></p>
+      </div>
+    </section>
+
+    <!-- Visualizando en Compass -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">🔍 Visualizando resultados en MongoDB Compass</h4>
+      <div class="content">
+        <p class="small">MongoDB Compass es muy útil para revisar los efectos de tus operaciones sin escribir comandos.</p>
+        <ul class="list-disc pl-6 text-lg text-gray-700">
+          <li><strong>Create:</strong> refresca la colección (botón "Refresh") y observa los nuevos documentos.</li>
+          <li><strong>Read:</strong> usa la barra de filtros para probar condiciones y la pestaña de proyección.</li>
+          <li><strong>Update:</strong> abre un documento y comprueba los campos actualizados (o usa agregaciones para verificar en lote).</li>
+          <li><strong>Delete:</strong> confirma que el documento ya no aparece y revisa la pestaña de índices si es necesario.</li>
+        </ul>
+      </div>
     </section>
 
     <!-- 6. Ejercicios guiados -->
     <section class="card p-6 mb-6">
       <h4 class="text-xl font-semibold mb-3">6. Ejercicios guiados</h4>
 
-      <details class="mb-3">
+      <details class="mb-3" open>
         <summary>Ejercicio 1 — Crear y consultar</summary>
         <div class="content">
-          <p class="small">Crea una colección <code class="inline">tienda</code> y una colección <code class="inline">productos</code>. Inserta 3 productos y consulta los que tienen precio &gt; 20000.</p>
+          <p class="small">Crea una colección <code class="inline">productos</code>. Inserta 3 productos y consulta los que tienen precio &gt; 20000.</p>
           <pre class="code">db.productos.insertMany([
   { nombre: "Camiseta", precio: 35000, stock: 12 },
   { nombre: "Gorra", precio: 15000, stock: 5 },
@@ -327,7 +378,44 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       </details>
     </section>
 
-    <!-- … todo tu HTML existente hasta antes del footer … -->
+    <!-- Mini Proyecto Integrador -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">🧠 Mini Proyecto CRUD — Tienda MongoDB</h4>
+      <div class="content">
+        <p class="small">Sigue estos pasos para consolidar lo aprendido.</p>
+        <ol class="list-decimal pl-6 text-lg text-gray-700">
+          <li>Crear la colección <code>productos</code> e insertar 5 ítems con <code>insertMany</code>.</li>
+          <li>Consultar solo productos con <code>stock &gt; 5</code>.</li>
+          <li>Actualizar todos los precios subiéndolos un 10% con <code>$mul</code>.</li>
+          <li>Eliminar los productos con <code>stock &lt; 3</code> usando <code>deleteMany</code>.</li>
+          <li>Comprobar el estado final con <code>find()</code>.</li>
+        </ol>
+
+        <div class="mt-4">
+          <strong>Script ejemplo (todo junto):</strong>
+          <pre class="code">db.productos.insertMany([
+  { nombre: "Camiseta", precio: 35000, stock: 12 },
+  { nombre: "Gorra", precio: 15000, stock: 2 },
+  { nombre: "Pantalón", precio: 55000, stock: 6 },
+  { nombre: "Calcetines", precio: 8000, stock: 4 },
+  { nombre: "Zapatos", precio: 85000, stock: 1 }
+]);
+
+// 1) Consultar stock > 5
+db.productos.find({ stock: { $gt: 5 } });
+
+// 2) Aumentar precios +10%
+db.productos.updateMany({}, { $mul: { precio: 1.10 } });
+
+// 3) Eliminar stock < 3
+db.productos.deleteMany({ stock: { $lt: 3 } });
+
+// 4) Ver resultado final
+db.productos.find().pretty();</pre>
+          <button class="btn btn-ghost mt-2" data-copy='db.productos.insertMany([{ nombre: "Camiseta", precio: 35000, stock: 12 }, { nombre: "Gorra", precio: 15000, stock: 2 }, { nombre: "Pantalón", precio: 55000, stock: 6 }, { nombre: "Calcetines", precio: 8000, stock: 4 }, { nombre: "Zapatos", precio: 85000, stock: 1 }]); db.productos.find({ stock: { $gt: 5 } }); db.productos.updateMany({}, { $mul: { precio: 1.10 } }); db.productos.deleteMany({ stock: { $lt: 3 } }); db.productos.find().pretty();'>Copiar script del mini proyecto</button>
+        </div>
+      </div>
+    </section>
 
     <!-- 7. Quiz de repaso -->
     <section class="card p-6 mb-6">
@@ -421,42 +509,44 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       <div id="quizResult" class="mt-4 p-4 rounded-lg hidden"></div>
     </section>
 
-        <!-- Reflection -->
-        <section class="card p-6 mb-6">
-          <h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
-          <ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
-            <li>Dominar CRUD es la base para cualquier app que use MongoDB.</li>
-            <li>Aplica proyecciones e índices para mantener rendimiento aceptable.</li>
-            <li>Controla los efectos de <code class="inline">update</code> y <code class="inline">delete</code> con filtros precisos o marcadores (soft deletes).</li>
-          </ul>
-    
-          <div class="mt-4 p-4 bg-teal-50 rounded-lg border-l-4 border-teal-400">
-            <strong>✅ Resultado esperado:</strong>
-            <ul class="list-disc pl-6 mt-2 text-gray-700">
-              <li>Saber insertar, consultar, actualizar y eliminar documentos en MongoDB.</li>
-              <li>Entender cuándo usar <code class="inline">insertMany</code>, <code class="inline">updateMany</code> y <code class="inline">deleteMany</code>.</li>
-              <li>Haber hecho los ejercicios guiados en tu cluster/Compass.</li>
-            </ul>
-          </div>
-        </section>
-    
-        <!-- bottom actions -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-          <div class="flex gap-3">
-            <a href="../index.html" class="btn btn-ghost">Volver al índice</a>
-          </div>
-        </div>
-    
-        <footer class="mt-10 text-center text-sm text-gray-500">
-          <p>📘 Guía de apoyo educativo — Versión 2025
-            Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
-        </footer>
+    <!-- Reflection / Cierre motivacional -->
+    <section class="card p-6 mb-6">
+      <h4 class="text-xl font-semibold mb-3">🧠 Reflexión final</h4>
+      <ul class="list-disc pl-6 text-lg text-gray-700 space-y-2">
+        <li>Dominar CRUD es la base para cualquier app que use MongoDB.</li>
+        <li>Aplica proyecciones e índices para mantener rendimiento aceptable.</li>
+        <li>Controla los efectos de <code class="inline">update</code> y <code class="inline">delete</code> con filtros precisos o marcadores (soft deletes).</li>
+      </ul>
+
+      <div class="mt-4 p-4 bg-teal-50 rounded-lg border-l-4 border-teal-400">
+        <strong>✅ Resultado esperado:</strong>
+        <ul class="list-disc pl-6 mt-2 text-gray-700">
+          <li>Saber insertar, consultar, actualizar y eliminar documentos en MongoDB.</li>
+          <li>Entender cuándo usar <code class="inline">insertMany</code>, <code class="inline">updateMany</code> y <code class="inline">deleteMany</code>.</li>
+          <li>Haber hecho los ejercicios guiados en tu cluster/Compass.</li>
+        </ul>
+      </div>
+
+      <p class="mt-4 italic text-gray-700">💬 “Dominar CRUD es el paso que transforma un usuario de MongoDB en un desarrollador productivo. Desde aquí, podrás construir APIs, paneles y dashboards basados en tus datos.”</p>
+    </section>
+
+    <!-- bottom actions -->
+    <div class="flex items-center justify-between gap-4 mt-6">
+      <div class="flex gap-3">
+        <a href="../index.html" class="btn btn-ghost">Volver al índice</a>
+      </div>
+    </div>
+
+    <footer class="mt-10 text-center text-sm text-gray-500">
+      <p>📘 Guía de apoyo educativo — Versión 2025
+        Desarrollada por Diego López con apoyo de Inteligencia Artificial para fines formativos.</p>
+    </footer>
 
   </main>
 
-
-
+  <!-- SCRIPTS -->
   <script>
+    // Respuestas correctas del quiz
     const answers = {
       q1: 'b',
       q2: 'b',
@@ -470,6 +560,7 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       q10: 'a'
     };
 
+    // Envío y calificación del quiz
     document.getElementById('submitQuiz').addEventListener('click', () => {
       let score = 0;
       for(let i=1;i<=10;i++){
@@ -478,24 +569,12 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       }
       const resultDiv = document.getElementById('quizResult');
       resultDiv.classList.remove('hidden');
-      resultDiv.innerHTML = `<strong>Tu puntuación: ${score}/10</strong> ${score===10?'🎉 ¡Perfecto!':'Sigue practicando para reforzar.'}`;
+      resultDiv.innerHTML = `<strong>Tu puntuación: ${score}/10</strong> ${score===10 ? '🎉 ¡Perfecto!' : (score>=7 ? '✅ Buen trabajo — repasa los puntos débiles.' : '🔁 Sigue practicando para reforzar.')}`;
+      // pequeño estilo
+      resultDiv.style.background = score >= 7 ? '#ecfdf5' : '#fff7ed';
+      resultDiv.style.borderLeft = score >= 7 ? '4px solid #10b981' : '4px solid #f59e0b';
+      resultDiv.style.padding = '1rem';
     });
-  </script>
-
-
-
-  </main>
-
-  <!-- SCRIPTS -->
-  <script>
-    // Helper: mostrar toast
-    function showToast(msg){
-      const b = document.createElement('div');
-      b.innerText = msg;
-      Object.assign(b.style,{position:'fixed',right:'18px',bottom:'18px',background:'linear-gradient(90deg,#0ea5a4,#0369a1)',color:'white',padding:'10px 14px',borderRadius:'10px',boxShadow:'0 10px 30px rgba(0,0,0,0.18)',zIndex:9999});
-      document.body.appendChild(b);
-      setTimeout(()=>b.remove(),1400);
-    }
 
     // Copiar al portapapeles (delegado en botones con data-copy)
     document.addEventListener('click', function(e){
@@ -512,6 +591,15 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       });
     });
 
+    // Helper: mostrar toast
+    function showToast(msg){
+      const b = document.createElement('div');
+      b.innerText = msg;
+      Object.assign(b.style,{position:'fixed',right:'18px',bottom:'18px',background:'linear-gradient(90deg,#0ea5a4,#0369a1)',color:'white',padding:'10px 14px',borderRadius:'10px',boxShadow:'0 10px 30px rgba(0,0,0,0.18)',zIndex:9999});
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),1400);
+    }
+
     // Acordeones con teclado: enter/space en summary (accesible por defecto, esto solo mejora UX)
     document.querySelectorAll('details').forEach(d=>{
       const s = d.querySelector('summary');
@@ -520,38 +608,8 @@ db.productos.find({ precio: { $gt: 20000 } })</pre>
       });
     });
 
-    // Mark completed (localStorage) - módulo 3
-    function setCompleted(val){
-      try {
-        localStorage.setItem('mod3_completed', val ? '1' : '0');
-        updateProgress();
-        showToast(val ? 'Módulo 3 marcado como completado ✅' : 'Módulo 3 marcado como no completado');
-      } catch(e){ console.error(e); }
-    }
-    document.getElementById('markDoneTop').addEventListener('click', ()=> setCompleted(true));
-    document.getElementById('markDoneBottom').addEventListener('click', ()=> setCompleted(true));
-
-    function updateProgress(){
-      const done = localStorage.getItem('mod3_completed') === '1';
-      document.getElementById('progressLabel').innerText = done ? '100% completado' : '0% completado';
-      document.querySelectorAll('#markDoneTop, #markDoneBottom').forEach(b => b.setAttribute('aria-pressed', done ? 'true' : 'false'));
-    }
-    updateProgress();
-
-    // Shortcut m => marcar completado
-    window.addEventListener('keydown', (e)=> { if(e.key.toLowerCase()==='m') setCompleted(true); });
-
     // Make pre.code focusable for accessibility
     document.querySelectorAll('pre.code').forEach(p=>p.setAttribute('tabindex','0'));
-
-    // Small enhancement: confirm before deleteMany in UI (this page is static but good reminder)
-    document.querySelectorAll('button[data-copy]').forEach(btn=>{
-      // no-op; copying only
-    });
-  </script>
-
-  <script>
-    localStorage.setItem("modulo1_estado", "completed"); // cambia 1 por el número del módulo
   </script>
 </body>
 </html>
